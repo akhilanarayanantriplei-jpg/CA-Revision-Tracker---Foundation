@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CA Foundation Tracker</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --accent: #2563eb;
+      --success: #16a34a;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 30px; }
+    .container { max-width: 480px; margin: 0 auto; padding: 16px; }
+    .card { background: var(--card); border-radius: 14px; padding: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 16px; }
+    h2, h3 { margin: 0 0 10px 0; color: var(--primary); }
+    label { font-size: 13px; font-weight: 600; color: #475569; display: block; margin-top: 12px; }
+    select, input[type="number"], input[type="date"], button {
+      width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; margin-top: 6px; box-sizing: border-box; font-size: 15px;
+    }
+    button { background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 18px; }
+    .unit-box { max-height: 250px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 8px; margin-top: 8px; background: #fff; }
+    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; line-height: 1.3; }
+    .progress-track { background: #e2e8f0; border-radius: 999px; height: 12px; overflow: hidden; margin: 6px 0 14px; }
+    .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; background: #e0f2fe; color: #0369a1; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- PAGE 1: DAILY INPUT -->
+  <div id="page-input" class="card">
+    <h2>Daily Study Update</h2>
+    <p style="font-size: 13px; color: #64748b; margin-top:0;">Log what you covered today. Saved only on your phone.</p>
+
+    <label>Subject Studied:</label>
+    <select id="subject-select" onchange="renderChecklist()">
+      <option value="p1">Paper 1: Accounting</option>
+      <option value="p2">Paper 2: Business Laws</option>
+      <option value="p3">Paper 3: Quantitative Aptitude</option>
+      <option value="p4">Paper 4: Business Economics</option>
+    </select>
+
+    <label>Tick Chapters/Units Completed:</label>
+    <div id="unit-container" class="unit-box"></div>
+
+    <label>Total Mock Tests Written So Far:</label>
+    <input type="number" id="mock-count" min="0" placeholder="e.g. 3">
+
+    <!-- Optional Planning Section -->
+    <details style="margin-top:14px;">
+      <summary style="font-size:13px; font-weight:700; color:var(--primary); cursor:pointer;">⚙️ Exam Countdown & Planning (Optional)</summary>
+      <div style="background:#f8fafc; padding:10px; border-radius:8px; margin-top:8px;">
+        <label>Exam Start Date:</label>
+        <input type="date" id="exam-date">
+        <label>Days/Half-Days Target per Paper:</label>
+        <input type="number" id="target-days" placeholder="e.g. 15 days per subject">
+      </div>
+    </details>
+
+    <button onclick="saveAndShowDashboard()">Update & View Progress</button>
+  </div>
+
+  <!-- PAGE 2: PROGRESS CHARTS -->
+  <div id="page-dashboard" class="card hidden">
+    <h2>Revision Readiness</h2>
+    <div id="countdown-badge" class="badge" style="margin-bottom:12px;"></div>
+
+    <div style="font-size:13px; font-weight:600; margin-top:8px;">
+      Total Exam Readiness (80% Syllabus + 20% Mocks)
+    </div>
+    <div class="progress-track"><div id="overall-bar" class="progress-fill" style="background:var(--success);"></div></div>
+    <div id="overall-label" style="font-size:12px; font-weight:700; text-align:right; margin-top:-10px;">0%</div>
+
+    <h3 style="margin-top:18px;">Subject Progress</h3>
+    <div id="subject-progress-container"></div>
+
+    <div id="planning-stats" style="font-size:12px; color:#475569; border-top:1px solid var(--border); padding-top:10px; margin-top:10px;"></div>
+
+    <button onclick="showInputPage()" style="background:#475569;">+ Log More Units</button>
+  </div>
+
+</div>
+
+<script>
+  // Latest ICAI New Scheme Syllabus Structure
+  const SYLLABUS = {
+    p1: {
+      name: "Paper 1: Accounting",
+      units: [
+        "Ch 1: Theoretical Framework (Units 1-7)",
+        "Ch 2: Accounting Process - Journal, Ledger, Trial Balance",
+        "Ch 2: Subsidiary Books, Cash Book, Rectification",
+        "Ch 3: Bank Reconciliation Statement (BRS)",
+        "Ch 4: Inventories",
+        "Ch 5: Depreciation and Amortisation",
+        "Ch 6: Bills of Exchange & Promissory Notes",
+        "Ch 7: Final Accounts of Sole Proprietors (Non-Mfg & Mfg)",
+        "Ch 8: Financial Statements of NPO",
+        "Ch 9: Accounts from Incomplete Records (Single Entry)",
+        "Ch 10: Partnership - Intro & Goodwill",
+        "Ch 10: Partnership - Admission, Retirement, Death",
+        "Ch 10: Partnership - Dissolution of Firms & LLPs",
+        "Ch 11: Company Accounts - Issue & Forfeiture of Shares",
+        "Ch 11: Company Accounts - Debentures & Bonus/Right Issue",
+        "Ch 11: Company Accounts - Redemption of Pref Shares & Debentures"
+      ]
+    },
+    p2: {
+      name: "Paper 2: Business Laws",
+      units: [
+        "Ch 1: Indian Regulatory Framework",
+        "Ch 2: Contract Act - Nature, Consideration, Essentials (U1-U3)",
+        "Ch 2: Contract Act - Performance & Breach of Contract (U4-U5)",
+        "Ch 2: Contract Act - Contingent & Quasi Contracts (U6)",
+        "Ch 2: Contract Act - Indemnity, Guarantee, Bailment, Pledge, Agency (U7-U9)",
+        "Ch 3: Sale of Goods Act - Formation & Conditions/Warranties (U1-U2)",
+        "Ch 3: Sale of Goods Act - Ownership Transfer & Unpaid Seller (U3-U4)",
+        "Ch 4: Partnership Act - Nature, Relations, Dissolution (U1-U3)",
+        "Ch 5: The Limited Liability Partnership Act, 2008",
+        "Ch 6: The Companies Act, 2013",
+        "Ch 7: The Negotiable Instruments Act, 1881"
+      ]
+    },
+    p3: {
+      name: "Paper 3: Quantitative Aptitude",
+      units: [
+        "Math Ch 1: Ratio, Proportion, Indices, Logarithms",
+        "Math Ch 2: Equations (Linear, Quadratic, Matrices)",
+        "Math Ch 3: Linear Inequalities",
+        "Math Ch 4: Mathematics of Finance (TVM, Annuity)",
+        "Math Ch 5: Permutations and Combinations",
+        "Math Ch 6: Sequence and Series (AP & GP)",
+        "Math Ch 7: Sets, Relations, Functions, Limits",
+        "Math Ch 8: Calculus - Differential & Integral",
+        "LR Ch 9: Number Series, Coding-Decoding, Odd Man Out",
+        "LR Ch 10: Direction Tests",
+        "LR Ch 11: Seating Arrangements",
+        "LR Ch 12: Blood Relations",
+        "Stats Ch 13: Statistical Representation & Sampling",
+        "Stats Ch 14: Central Tendency and Dispersion",
+        "Stats Ch 15: Probability",
+        "Stats Ch 16: Theoretical Distributions",
+        "Stats Ch 17: Correlation and Regression",
+        "Stats Ch 18: Index Numbers"
+      ]
+    },
+    p4: {
+      name: "Paper 4: Business Economics",
+      units: [
+        "Ch 1: Nature & Scope of Business Economics (U1-U2)",
+        "Ch 2: Theory of Demand & Elasticity (U1)",
+        "Ch 2: Consumer Behaviour & Supply (U2-U3)",
+        "Ch 3: Production & Cost Concepts (U1-U2)",
+        "Ch 4: Markets & Price Determination (U1-U3)",
+        "Ch 5: Business Cycles",
+        "Ch 6: National Income - Accounting & Keynesian (U1-U2)",
+        "Ch 7: Public Finance - Fiscal Functions, Budget & Debt (U1-U4)",
+        "Ch 8: Money Market - Money Demand, Supply & Monetary Policy (U1-U3)",
+        "Ch 9: International Trade - Theories, Policy, Exchange Rate (U1-U5)",
+        "Ch 10: Indian Economy"
+      ]
+    }
+  };
+
+  let localData = JSON.parse(localStorage.getItem("ca_tracker_data")) || {
+    completedUnits: {},
+    mocks: 0,
+    examDate: "",
+    targetDays: ""
+  };
+
+  function renderChecklist() {
+    const sub = document.getElementById("subject-select").value;
+    const container = document.getElementById("unit-container");
+    container.innerHTML = "";
+
+    SYLLABUS[sub].units.forEach((title, idx) => {
+      const key = `${sub}_u${idx}`;
+      const checked = localData.completedUnits[key] ? "checked" : "";
+      container.innerHTML += `
+        <label class="unit-item">
+          <input type="checkbox" onchange="toggleUnit('${key}', this.checked)" ${checked}>
+          <span>${title}</span>
+        </label>`;
+    });
+  }
+
+  function toggleUnit(key, status) {
+    if (status) localData.completedUnits[key] = true;
+    else delete localData.completedUnits[key];
+  }
+
+  function saveAndShowDashboard() {
+    localData.mocks = parseInt(document.getElementById("mock-count").value) || 0;
+    localData.examDate = document.getElementById("exam-date").value;
+    localData.targetDays = document.getElementById("target-days").value;
+    localStorage.setItem("ca_tracker_data", JSON.stringify(localData));
+
+    document.getElementById("page-input").classList.add("hidden");
+    document.getElementById("page-dashboard").classList.remove("hidden");
+    buildDashboard();
+  }
+
+  function showInputPage() {
+    document.getElementById("page-dashboard").classList.add("hidden");
+    document.getElementById("page-input").classList.remove("hidden");
+    renderChecklist();
+  }
+
+  function buildDashboard() {
+    let totalUnits = 0;
+    let completedUnits = 0;
+    const progressDiv = document.getElementById("subject-progress-container");
+    progressDiv.innerHTML = "";
+
+    Object.keys(SYLLABUS).forEach(subKey => {
+      const list = SYLLABUS[subKey].units;
+      totalUnits += list.length;
+      const count = list.filter((_, idx) => localData.completedUnits[`${subKey}_u${idx}`]).length;
+      completedUnits += count;
+      const pct = Math.round((count / list.length) * 100);
+
+      progressDiv.innerHTML += `
+        <div style="font-size:13px; display:flex; justify-content:space-between; margin-top:8px;">
+          <span>${SYLLABUS[subKey].name}</span>
+          <span><strong>${pct}%</strong> (${count}/${list.length})</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+    });
+
+    // 80% syllabus weight + 20% mocks weight (Benchmark: 6 mocks)
+    const syllabusScore = (completedUnits / totalUnits) * 80;
+    const mockScore = Math.min(20, (localData.mocks / 6) * 20);
+    const overallTotal = Math.round(syllabusScore + mockScore);
+
+    document.getElementById("overall-bar").style.width = `${overallTotal}%`;
+    document.getElementById("overall-label").innerText = `${overallTotal}% Ready`;
+
+    // Days Countdown
+    const badge = document.getElementById("countdown-badge");
+    if (localData.examDate) {
+      const diffDays = Math.ceil((new Date(localData.examDate) - new Date()) / (1000 * 60 * 60 * 24));
+      badge.innerText = diffDays > 0 ? `⏳ ${diffDays} days left until exams` : "Exam ongoing / completed";
+    } else {
+      badge.innerText = "📅 Exam date not specified";
+    }
+
+    // Planning insights
+    const statsDiv = document.getElementById("planning-stats");
+    if (localData.targetDays) {
+      statsDiv.innerHTML = `<strong>Study Target:</strong> Aiming for ${localData.targetDays} revision days per paper. Track completed units weekly to stay on schedule.`;
+    } else {
+      statsDiv.innerHTML = "";
+    }
+  }
+
+  // Pre-fill fields
+  document.getElementById("mock-count").value = localData.mocks || "";
+  document.getElementById("exam-date").value = localData.examDate || "";
+  document.getElementById("target-days").value = localData.targetDays || "";
+  renderChecklist();
+</script>
+</body>
+</html>
