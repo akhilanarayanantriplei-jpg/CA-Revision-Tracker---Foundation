@@ -19,6 +19,7 @@
       --primary: #0f172a;
       --brand: #2563eb;
       --brand-soft: #eff6ff;
+      --brand-fill: #bfdbfe;
       --success: #10b981;
       --bg: #f8fafc;
       --card: #ffffff;
@@ -44,7 +45,7 @@
     button.btn-primary { background: var(--brand); color: white; border: none; font-weight: 600; cursor: pointer; margin-top: 14px; border-radius: 8px; padding: 12px; font-size: 14px; }
     button.btn-primary:active { opacity: 0.9; }
 
-    /* High-Density Chapter Card */
+    /* Compact Chapter Card */
     .chapter-card { border: 1px solid var(--border); border-radius: 10px; margin-top: 6px; background: #fff; overflow: hidden; }
     
     /* Line 1: Title & Main Checkbox */
@@ -52,18 +53,30 @@
     .chap-line1 input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
     .chapter-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
 
-    /* Line 2: Left drop-down, Right progress bar */
-    .chap-line2 { display: flex; align-items: center; justify-content: space-between; padding: 2px 10px 8px 35px; gap: 10px; }
+    /* Line 2: Progress-Pill Unit Button & Meta */
+    .chap-line2 { display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 8px 35px; gap: 10px; }
     
+    /* Dynamic Progress Pill for Units */
     .expand-btn {
-      background: #f1f5f9; border: none; border-radius: 12px; padding: 3px 8px; font-size: 11px; font-weight: 600; color: var(--brand); cursor: pointer; display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0;
+      position: relative;
+      border: 1px solid #cbd5e1;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1e3a8a;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: #f1f5f9;
+      transition: background 0.3s ease;
     }
-    .expand-btn:active { background: #e2e8f0; }
+    .expand-btn:active { filter: brightness(0.95); }
 
-    .chap-bar-container { display: flex; align-items: center; gap: 6px; flex: 1; justify-content: flex-end; }
-    .chap-progress-track { background: #f1f5f9; border-radius: 999px; height: 5px; width: 60px; overflow: hidden; }
-    .chap-progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.3s ease; }
-    .chap-meta-text { font-size: 10.5px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+    .chap-meta-text { font-size: 11px; color: var(--muted); font-weight: 500; }
 
     /* Compact Units Drawer */
     .units-list { border-top: 1px dashed var(--border); padding: 4px 10px 6px 34px; background: #f8fafc; }
@@ -132,9 +145,9 @@
       <option value="p4">Paper 4: Business Economics (100 Marks)</option>
     </select>
 
-    <!-- RTP & MOCK INPUTS -->
+    <!-- PRACTICE METRICS -->
     <div class="sub-section">
-      <div style="font-size:11px; font-weight:700; color:var(--brand); text-transform:uppercase; margin-bottom:4px;">Exam Practice Status</div>
+      <div style="font-size:11px; font-weight:700; color:var(--brand); text-transform:uppercase; margin-bottom:4px;">Practice Metrics</div>
       <label class="unit-item" style="border:none; padding:0; color:#1e293b; font-weight:500;">
         <input type="checkbox" id="rtp-checkbox" onchange="updateRtp(this.checked)">
         <span>ICAI Revision Test Paper (RTP) Completed</span>
@@ -431,6 +444,11 @@
     document.getElementById("first-time-strategy").classList.add("hidden");
   }
 
+  function getButtonProgressGradient(pct) {
+    if (pct === 0) return '#f1f5f9';
+    return `linear-gradient(to right, #bfdbfe ${pct}%, #f1f5f9 ${pct}%)`;
+  }
+
   function renderSubjectView() {
     const sub = document.getElementById("subject-select").value;
     document.getElementById("rtp-checkbox").checked = !!appData.rtpDone[sub];
@@ -449,6 +467,7 @@
 
       const isAllDone = totalUnits > 0 && completedUnitsCount === totalUnits;
       const pct = Math.round((completedUnitsCount / totalUnits) * 100);
+      const bgGradient = getButtonProgressGradient(pct);
 
       let unitsHtml = "";
       chap.units.forEach((uTitle, uIdx) => {
@@ -463,23 +482,20 @@
 
       const cardHtml = `
         <div class="chapter-card" id="card-${sub}-${cIdx}">
-          <!-- Line 1: Full Chapter Title and Checkbox -->
+          <!-- Line 1: Full Chapter Title & Box -->
           <div class="chap-line1" onclick="handleTitleRowClick(event, '${sub}', ${cIdx})">
             <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
             <span class="chapter-title">${chap.title}</span>
           </div>
 
-          <!-- Line 2: Left drop-down & Right completion bar -->
+          <!-- Line 2: Progress-Pill Unit Button & Meta -->
           <div class="chap-line2">
-            <button type="button" class="expand-btn" onclick="toggleUnitAccordion('units-${sub}-${cIdx}', this)">
-              <span>▾ ${totalUnits} ${totalUnits === 1 ? 'Unit' : 'Units'}</span>
+            <button type="button" class="expand-btn" id="btn-${sub}-${cIdx}" 
+              style="background: ${bgGradient};"
+              onclick="toggleUnitAccordion('units-${sub}-${cIdx}', this)">
+              <span id="btn-text-${sub}-${cIdx}">▾ ${totalUnits} ${totalUnits === 1 ? 'Unit' : 'Units'}</span>
             </button>
-            <div class="chap-bar-container">
-              <span class="chap-meta-text" id="chap-label-${sub}-${cIdx}">${completedUnitsCount}/${totalUnits} • ${pct}%</span>
-              <div class="chap-progress-track">
-                <div class="chap-progress-fill" id="chap-bar-${sub}-${cIdx}" style="width:${pct}%;"></div>
-              </div>
-            </div>
+            <span class="chap-meta-text" id="chap-label-${sub}-${cIdx}">${completedUnitsCount}/${totalUnits} • ${pct}%</span>
           </div>
 
           <!-- Recessed Units Drawer -->
@@ -501,14 +517,15 @@
 
   function toggleUnitAccordion(id, btn) {
     const el = document.getElementById(id);
+    const textSpan = btn.querySelector("span");
     if (el.classList.contains("hidden")) {
       el.classList.remove("hidden");
-      btn.innerHTML = btn.innerHTML.replace("▾", "▴");
-      btn.style.background = "#e2e8f0";
+      textSpan.innerText = textSpan.innerText.replace("▾", "▴");
+      btn.style.borderColor = "var(--brand)";
     } else {
       el.classList.add("hidden");
-      btn.innerHTML = btn.innerHTML.replace("▴", "▾");
-      btn.style.background = "#f1f5f9";
+      textSpan.innerText = textSpan.innerText.replace("▴", "▾");
+      btn.style.borderColor = "#cbd5e1";
     }
   }
 
@@ -537,7 +554,9 @@
     let completedCount = 0;
 
     chap.units.forEach((_, uIdx) => {
-      if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) completedCount++;
+      if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) {
+        completedCount++;
+      }
     });
 
     const isAllDone = totalUnits > 0 && completedCount === totalUnits;
@@ -546,9 +565,11 @@
     const chapChk = document.getElementById(`chap-chk-${sub}-${cIdx}`);
     if (chapChk) chapChk.checked = isAllDone;
 
-    const bar = document.getElementById(`chap-bar-${sub}-${cIdx}`);
+    // Update Progress Pill Background Gradient
+    const btn = document.getElementById(`btn-${sub}-${cIdx}`);
+    if (btn) btn.style.background = getButtonProgressGradient(pct);
+
     const label = document.getElementById(`chap-label-${sub}-${cIdx}`);
-    if (bar) bar.style.width = `${pct}%`;
     if (label) label.innerText = `${completedCount}/${totalUnits} • ${pct}%`;
 
     const unitsContainer = document.getElementById(`units-${sub}-${cIdx}`);
