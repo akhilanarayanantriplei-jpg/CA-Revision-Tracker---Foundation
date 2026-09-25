@@ -36,7 +36,7 @@
       width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; margin-top: 6px; font-size: 15px; outline: none;
     }
     select:focus, input:focus { border-color: var(--accent); }
-    button { background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 18px; transition: background 0.2s; }
+    button { background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 18px; transition: background 0.2s; border-radius: 8px; }
     button:active { background: #172554; }
     .chap-details { border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; overflow: hidden; background: #fff; }
     .chap-summary { padding: 10px 12px; font-size: 13.5px; font-weight: 600; cursor: pointer; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; }
@@ -46,20 +46,54 @@
     .unit-item input[type="checkbox"] { margin-top: 2px; width: 17px; height: 17px; cursor: pointer; }
     .progress-track { background: #e2e8f0; border-radius: 999px; height: 12px; overflow: hidden; margin: 6px 0 14px; }
     .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; }
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; background: #e0f2fe; color: #0369a1; }
+    .badge { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; background: #e0f2fe; color: #0369a1; }
     .hidden { display: none; }
     .sub-section { background: var(--primary-light); border-radius: 8px; padding: 12px; margin-top: 14px; border: 1px solid #bfdbfe; }
-    .row { display: flex; gap: 10px; }
-    .row > div { flex: 1; }
+    
+    /* Onboarding 80/20 Strategy Banner */
+    .strategy-card { background: #fefce8; border: 1.5px solid #fde047; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    .strategy-box { background: #fff; border-radius: 8px; padding: 10px; border: 1px solid #fef08a; text-align: center; }
+    .strategy-box strong { display: block; font-size: 18px; color: #854d0e; }
+    .strategy-box span { font-size: 11.5px; color: #713f12; }
   </style>
 </head>
 <body>
 <div class="container">
 
+  <!-- FIRST TIME ONBOARDING: 80/20 TIME SPLIT -->
+  <div id="first-time-strategy" class="strategy-card hidden">
+    <h3 style="color:#854d0e; margin:0 0 6px;">🎯 Exam Countdown & Strategy</h3>
+    <p style="font-size:13px; color:#713f12; margin:0 0 10px; line-height:1.4;">
+      Exam starts on <strong>January 3, 2027</strong> (Jan 3, 5, 7, 9). Based on scientific CA preparation guidelines, your remaining time is split:
+    </p>
+
+    <div class="strategy-grid">
+      <div class="strategy-box">
+        <strong id="split-per-sub">0 Days</strong>
+        <span>per Paper (80% Total)</span>
+      </div>
+      <div class="strategy-box">
+        <strong id="split-rev">0 Days</strong>
+        <span>Final Revision Buffer (20%)</span>
+      </div>
+    </div>
+
+    <button onclick="dismissFirstTimeModal()" style="background:#ca8a04; color:#fff; padding:10px; font-size:14px; margin-top:12px;">
+      Got It, Start Revision!
+    </button>
+  </div>
+
+  <!-- PERSISTENT COUNTDOWN BADGE -->
+  <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+    <div id="countdown-badge" class="badge">⏳ Calculating days...</div>
+    <span style="font-size:11px; color:var(--muted);">Jan 3, 5, 7, 9</span>
+  </div>
+
   <!-- SCREEN 1: INPUT AND LOGGING -->
   <div id="page-input" class="card">
     <h2>Daily Revision Tracker</h2>
-    <p style="font-size: 13px; color: var(--muted); margin: 0 0 12px;">Check completed chapters/units for today. Progress stays 100% private to your phone.</p>
+    <p style="font-size: 13px; color: var(--muted); margin: 0 0 12px;">Select what you studied today. All progress is saved automatically on your phone.</p>
 
     <label>Select Subject to Update:</label>
     <select id="subject-select" onchange="renderSubjectView()">
@@ -74,7 +108,7 @@
       <div style="font-size:13px; font-weight:700; color:var(--primary); margin-bottom:8px;">Subject Practice Status:</div>
       <label class="unit-item" style="border:none; padding:2px 0;">
         <input type="checkbox" id="rtp-checkbox" onchange="updateRtp(this.checked)">
-        <span><strong>ICAI Revision Test Paper (RTP) Completed</strong> for this subject</span>
+        <span><strong>ICAI Revision Test Paper (RTP) Completed</strong></span>
       </label>
       <label style="margin-top:8px;">Mock Tests Written for this paper:</label>
       <input type="number" id="sub-mock-count" min="0" placeholder="e.g. 2" onchange="updateSubMock(this.value)">
@@ -83,24 +117,12 @@
     <label style="margin-top:16px;">Syllabus Breakdown (Click chapter to toggle units):</label>
     <div id="chapters-accordion" style="margin-top:8px;"></div>
 
-    <!-- OPTIONAL EXAM PLANNING ACCORDION -->
-    <details style="margin-top:18px;">
-      <summary style="font-size:13px; font-weight:700; color:var(--primary); cursor:pointer;">⚙️ Exam Countdown & Planning (Optional)</summary>
-      <div style="background:#f8fafc; padding:12px; border-radius:8px; margin-top:8px; border:1px solid var(--border);">
-        <label>Exam Start Date:</label>
-        <input type="date" id="exam-date">
-        <label>Target Revision Days/Half-Days per Subject:</label>
-        <input type="number" id="target-days" placeholder="e.g. 12 days per paper">
-      </div>
-    </details>
-
     <button onclick="saveAndShowDashboard()">Save & View Progress Dashboard</button>
   </div>
 
   <!-- SCREEN 2: PROGRESS DASHBOARD -->
   <div id="page-dashboard" class="card hidden">
     <h2>Revision Readiness</h2>
-    <div id="countdown-badge" class="badge" style="margin-bottom:12px;"></div>
 
     <div style="font-size:13px; font-weight:600; margin-top:8px;">
       Overall Exam Readiness (70% Syllabus + 15% RTPs + 15% Mocks)
@@ -111,7 +133,7 @@
     <h3 style="margin-top:20px;">Subject-Wise Completion</h3>
     <div id="subject-bars-container"></div>
 
-    <div id="planning-summary" style="font-size:12px; color:var(--muted); border-top:1px solid var(--border); padding-top:10px; margin-top:10px;"></div>
+    <div id="strategy-reminder" style="font-size:12px; color:var(--muted); border-top:1px solid var(--border); padding-top:10px; margin-top:14px;"></div>
 
     <button onclick="showInputPage()" style="background:#475569;">+ Log More Units / Edit Inputs</button>
   </div>
@@ -119,7 +141,9 @@
 </div>
 
 <script>
-  // Full, complete ICAI New Scheme Syllabus tree
+  // Default target date: Jan 3, 2027
+  const DEFAULT_EXAM_DATE = "2027-01-03";
+
   const SYLLABUS_TREE = {
     p1: {
       name: "Paper 1: Accounting",
@@ -242,7 +266,7 @@
         },
         {
           title: "Ch 5: The Limited Liability Partnership Act, 2008",
-          units: ["Full Chapter Coverage: Meaning, Incorporation, Partners & Differences"]
+          units: ["Meaning, Incorporation, Partners & Differences"]
         },
         {
           title: "Ch 6: The Companies Act, 2013",
@@ -327,7 +351,7 @@
         },
         {
           title: "Ch 5: Business Cycles",
-          units: ["Full Chapter Coverage (Phases, Features & Causes)"]
+          units: ["Phases, Features & Causes"]
         },
         {
           title: "Ch 6: Determination of National Income",
@@ -371,23 +395,51 @@
     }
   };
 
-  // Persistent storage state
   let appData = JSON.parse(localStorage.getItem("ca_found_revision_state")) || {
     completedUnits: {},
     rtpDone: {},
     mocksDone: {},
-    examDate: "",
-    targetDays: ""
+    hasSeenStrategy: false
   };
+
+  function calculateCountdown() {
+    const today = new Date();
+    const examDate = new Date(DEFAULT_EXAM_DATE);
+    const diffTime = examDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : 0;
+  }
+
+  function initCountdownAndStrategy() {
+    const daysLeft = calculateCountdown();
+    const badge = document.getElementById("countdown-badge");
+    badge.innerText = `⏳ ${daysLeft} days until Jan 3 Exam`;
+
+    // 80/20 Rule: 80% time / 4 subjects, 20% revision buffer
+    const daysForSyllabus = Math.floor(daysLeft * 0.80);
+    const daysPerSubject = Math.floor(daysForSyllabus / 4);
+    const revisionBuffer = daysLeft - daysForSyllabus;
+
+    document.getElementById("split-per-sub").innerText = `${daysPerSubject} Days`;
+    document.getElementById("split-rev").innerText = `${revisionBuffer} Days`;
+
+    if (!appData.hasSeenStrategy) {
+      document.getElementById("first-time-strategy").classList.remove("hidden");
+    }
+  }
+
+  function dismissFirstTimeModal() {
+    appData.hasSeenStrategy = true;
+    saveToStorage();
+    document.getElementById("first-time-strategy").classList.add("hidden");
+  }
 
   function renderSubjectView() {
     const sub = document.getElementById("subject-select").value;
     
-    // Set RTP & Mock fields for this subject
     document.getElementById("rtp-checkbox").checked = !!appData.rtpDone[sub];
     document.getElementById("sub-mock-count").value = appData.mocksDone[sub] || "";
 
-    // Render Chapters & Nested Units
     const container = document.getElementById("chapters-accordion");
     container.innerHTML = "";
 
@@ -437,10 +489,7 @@
   }
 
   function saveAndShowDashboard() {
-    appData.examDate = document.getElementById("exam-date").value;
-    appData.targetDays = document.getElementById("target-days").value;
     saveToStorage();
-
     document.getElementById("page-input").classList.add("hidden");
     document.getElementById("page-dashboard").classList.remove("hidden");
     buildDashboard();
@@ -496,7 +545,6 @@
         </div>`;
     });
 
-    // Readiness formula: 70% Syllabus Units + 15% RTPs (4 subjects) + 15% Mocks (Benchmark: 8 full mocks)
     const unitScore = (grandDoneUnits / grandTotalUnits) * 70;
     const rtpScore = (totalRtpCompleted / 4) * 15;
     const mockScore = Math.min(15, (totalMocksAttempted / 8) * 15);
@@ -505,27 +553,18 @@
     document.getElementById("overall-bar").style.width = `${overallScore}%`;
     document.getElementById("overall-label").innerText = `${overallScore}% Readiness Score`;
 
-    // Days Countdown
-    const badge = document.getElementById("countdown-badge");
-    if (appData.examDate) {
-      const diff = Math.ceil((new Date(appData.examDate) - new Date()) / (1000 * 60 * 60 * 24));
-      badge.innerText = diff > 0 ? `⏳ ${diff} days until exams` : "Exam period active";
-    } else {
-      badge.innerText = "📅 Exam date not specified";
-    }
+    const daysLeft = calculateCountdown();
+    const daysForSyllabus = Math.floor(daysLeft * 0.80);
+    const daysPerSubject = Math.floor(daysForSyllabus / 4);
+    const revisionBuffer = daysLeft - daysForSyllabus;
 
-    // Planning Notes
-    const summaryDiv = document.getElementById("planning-summary");
-    if (appData.targetDays) {
-      summaryDiv.innerHTML = `<strong>Study Target:</strong> Aiming for ${appData.targetDays} revision days per paper. Track completed units weekly to pace yourself before mock exams.`;
-    } else {
-      summaryDiv.innerHTML = "";
-    }
+    document.getElementById("strategy-reminder").innerHTML = `
+      <strong>Recommended Pacing (80/20 Rule):</strong> Target finishing 1st detailed pass within <strong>${daysPerSubject} days per paper</strong>, reserving the remaining <strong>${revisionBuffer} days</strong> exclusively for RTPs and timed 3-hour MTPs.
+    `;
   }
 
-  // Initial Load
-  document.getElementById("exam-date").value = appData.examDate || "";
-  document.getElementById("target-days").value = appData.targetDays || "";
+  // Initial Boot
+  initCountdownAndStrategy();
   renderSubjectView();
 </script>
 </body>
