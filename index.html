@@ -32,25 +32,40 @@
     .card { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); margin-bottom: 16px; }
     h2, h3 { margin: 0 0 10px 0; color: var(--primary); }
     label { font-size: 13px; font-weight: 600; color: #334155; display: block; margin-top: 14px; }
-    select, input[type="number"], input[type="date"], button {
+    select, input[type="number"], button {
       width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; margin-top: 6px; font-size: 15px; outline: none;
     }
     select:focus, input:focus { border-color: var(--accent); }
     button { background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 18px; transition: background 0.2s; border-radius: 8px; }
     button:active { background: #172554; }
-    .chap-details { border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; overflow: hidden; background: #fff; }
-    .chap-summary { padding: 10px 12px; font-size: 13.5px; font-weight: 600; cursor: pointer; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; }
-    .chap-units { padding: 6px 12px; background: #ffffff; }
-    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; line-height: 1.35; }
+
+    /* Chapter Card Styles */
+    .chapter-card { border: 1.5px solid var(--border); border-radius: 10px; margin-top: 10px; background: #fff; overflow: hidden; }
+    .chapter-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #f8fafc; gap: 8px; }
+    .chapter-main-click { display: flex; align-items: center; gap: 10px; flex: 1; cursor: pointer; }
+    .chapter-title { font-size: 13.5px; font-weight: 600; color: #1e293b; }
+    .expand-btn { background: #e2e8f0; border: none; border-radius: 6px; padding: 5px 8px; font-size: 11px; font-weight: 700; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 3px; }
+    
+    /* In-line Chapter Progress Bar */
+    .chap-progress-wrapper { padding: 4px 12px 10px; background: #f8fafc; }
+    .chap-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .chap-progress-track { background: #e2e8f0; border-radius: 999px; height: 6px; overflow: hidden; }
+    .chap-progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+
+    /* Unit Sub-List */
+    .units-list { border-top: 1px solid var(--border); padding: 8px 14px 10px 34px; background: #ffffff; }
+    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 12.5px; line-height: 1.35; color: #475569; }
     .unit-item:last-child { border-bottom: none; }
-    .unit-item input[type="checkbox"] { margin-top: 2px; width: 17px; height: 17px; cursor: pointer; }
+    .unit-item input[type="checkbox"], .chapter-header input[type="checkbox"] {
+      width: 17px; height: 17px; cursor: pointer; margin-top: 1px; flex-shrink: 0;
+    }
+
     .progress-track { background: #e2e8f0; border-radius: 999px; height: 12px; overflow: hidden; margin: 6px 0 14px; }
     .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; }
     .badge { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; background: #e0f2fe; color: #0369a1; }
     .hidden { display: none; }
     .sub-section { background: var(--primary-light); border-radius: 8px; padding: 12px; margin-top: 14px; border: 1px solid #bfdbfe; }
     
-    /* Onboarding 80/20 Strategy Banner */
     .strategy-card { background: #fefce8; border: 1.5px solid #fde047; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
     .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
     .strategy-box { background: #fff; border-radius: 8px; padding: 10px; border: 1px solid #fef08a; text-align: center; }
@@ -65,7 +80,7 @@
   <div id="first-time-strategy" class="strategy-card hidden">
     <h3 style="color:#854d0e; margin:0 0 6px;">🎯 Exam Countdown & Strategy</h3>
     <p style="font-size:13px; color:#713f12; margin:0 0 10px; line-height:1.4;">
-      Exam starts on <strong>January 3, 2027</strong> (Jan 3, 5, 7, 9). Based on scientific CA preparation guidelines, your remaining time is split:
+      Exam starts on <strong>January 3, 2027</strong> (Jan 3, 5, 7, 9). Time allocation guideline:
     </p>
 
     <div class="strategy-grid">
@@ -84,18 +99,18 @@
     </button>
   </div>
 
-  <!-- PERSISTENT COUNTDOWN BADGE -->
+  <!-- COUNTDOWN BADGE -->
   <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
     <div id="countdown-badge" class="badge">⏳ Calculating days...</div>
-    <span style="font-size:11px; color:var(--muted);">Jan 3, 5, 7, 9</span>
+    <span style="font-size:11px; color:var(--muted);">CA Foundation (Jan 3, 5, 7, 9)</span>
   </div>
 
   <!-- SCREEN 1: INPUT AND LOGGING -->
   <div id="page-input" class="card">
     <h2>Daily Revision Tracker</h2>
-    <p style="font-size: 13px; color: var(--muted); margin: 0 0 12px;">Select what you studied today. All progress is saved automatically on your phone.</p>
+    <p style="font-size: 13px; color: var(--muted); margin: 0 0 12px;">Tick an entire chapter, or tap <strong>Units</strong> to select specific parts.</p>
 
-    <label>Select Subject to Update:</label>
+    <label>Select Subject:</label>
     <select id="subject-select" onchange="renderSubjectView()">
       <option value="p1">Paper 1: Accounting (100 Marks)</option>
       <option value="p2">Paper 2: Business Laws (100 Marks)</option>
@@ -103,7 +118,7 @@
       <option value="p4">Paper 4: Business Economics (100 Marks)</option>
     </select>
 
-    <!-- RTP & MOCK INPUTS FOR THIS SUBJECT -->
+    <!-- RTP & MOCK INPUTS -->
     <div class="sub-section">
       <div style="font-size:13px; font-weight:700; color:var(--primary); margin-bottom:8px;">Subject Practice Status:</div>
       <label class="unit-item" style="border:none; padding:2px 0;">
@@ -114,8 +129,8 @@
       <input type="number" id="sub-mock-count" min="0" placeholder="e.g. 2" onchange="updateSubMock(this.value)">
     </div>
 
-    <label style="margin-top:16px;">Syllabus Breakdown (Click chapter to toggle units):</label>
-    <div id="chapters-accordion" style="margin-top:8px;"></div>
+    <label style="margin-top:16px;">Chapters & Live Progress:</label>
+    <div id="chapters-list"></div>
 
     <button onclick="saveAndShowDashboard()">Save & View Progress Dashboard</button>
   </div>
@@ -125,7 +140,7 @@
     <h2>Revision Readiness</h2>
 
     <div style="font-size:13px; font-weight:600; margin-top:8px;">
-      Overall Exam Readiness (70% Syllabus + 15% RTPs + 15% Mocks)
+      Total Exam Readiness (70% Syllabus + 15% RTPs + 15% Mocks)
     </div>
     <div class="progress-track"><div id="overall-bar" class="progress-fill" style="background:var(--success);"></div></div>
     <div id="overall-label" style="font-size:13px; font-weight:700; text-align:right; margin-top:-10px;">0% Ready</div>
@@ -141,7 +156,6 @@
 </div>
 
 <script>
-  // Default target date: Jan 3, 2027
   const DEFAULT_EXAM_DATE = "2027-01-03";
 
   const SYLLABUS_TREE = {
@@ -156,7 +170,7 @@
             "Unit 3: Capital and Revenue Expenditures and Receipts",
             "Unit 4: Contingent Assets and Contingent Liabilities",
             "Unit 5: Accounting Policies",
-            "Unit 6: Accounting as Measurement Discipline (Valuation Principles)",
+            "Unit 6: Accounting as Measurement Discipline (Valuation)",
             "Unit 7: Accounting Standards"
           ]
         },
@@ -173,19 +187,19 @@
         },
         {
           title: "Ch 3: Bank Reconciliation Statement (BRS)",
-          units: ["Full Chapter Coverage & Illustrations"]
+          units: ["Complete BRS Concepts & Practical Problems"]
         },
         {
           title: "Ch 4: Inventories",
-          units: ["Full Chapter Coverage & Valuation Methods"]
+          units: ["Valuation Methods, FIFO, Weighted Avg, Physical Stock Take"]
         },
         {
           title: "Ch 5: Depreciation and Amortisation",
-          units: ["Full Chapter Coverage & Computation Methods"]
+          units: ["SLM, WDV, Change in Method, Machine Hour Rate"]
         },
         {
           title: "Ch 6: Bills of Exchange and Promissory Notes",
-          units: ["Full Chapter Coverage, Endorsement & Dishonour"]
+          units: ["Discounting, Endorsement, Dishonour, Accommodation Bills"]
         },
         {
           title: "Ch 7: Final Accounts of Sole Proprietors",
@@ -196,17 +210,17 @@
         },
         {
           title: "Ch 8: Financial Statements of NPO",
-          units: ["Full Chapter Coverage (Receipt & Payment, Income & Expenditure)"]
+          units: ["Receipts & Payments, Income & Expenditure, Balance Sheet"]
         },
         {
-          title: "Ch 9: Accounts from Incomplete Records (Single Entry)",
-          units: ["Full Chapter Coverage & Statement of Affairs"]
+          title: "Ch 9: Accounts from Incomplete Records",
+          units: ["Single Entry Conversion & Statement of Affairs"]
         },
         {
           title: "Ch 10: Partnership and LLP Accounts",
           units: [
             "Unit 1: Introduction to Partnership Accounts",
-            "Unit 2: Treatment of Goodwill in Partnership Accounts",
+            "Unit 2: Treatment of Goodwill",
             "Unit 3: Admission of a New Partner",
             "Unit 4: Retirement of a Partner",
             "Unit 5: Death of a Partner",
@@ -219,7 +233,7 @@
             "Unit 1: Introduction to Company Accounts",
             "Unit 2: Issue, Forfeiture and Re-Issue of Shares",
             "Unit 3: Issue of Debentures",
-            "Unit 4: Accounting for Bonus Issue and Right Issue",
+            "Unit 4: Bonus Issue and Right Issue",
             "Unit 5: Redemption of Preference Shares",
             "Unit 6: Redemption of Debentures"
           ]
@@ -231,7 +245,7 @@
       chapters: [
         {
           title: "Ch 1: Indian Regulatory Framework",
-          units: ["Regulatory Bodies, Legislative Process & Legal System"]
+          units: ["Sources of Law, Legislative Bodies & Judiciary System"]
         },
         {
           title: "Ch 2: The Indian Contract Act, 1872",
@@ -240,7 +254,7 @@
             "Unit 2: Consideration",
             "Unit 3: Other Essential Elements of a Contract",
             "Unit 4: Performance of Contract",
-            "Unit 5: Breach of Contract and Its Remedies",
+            "Unit 5: Breach of Contract and Remedies",
             "Unit 6: Contingent and Quasi Contracts",
             "Unit 7: Contract of Indemnity and Guarantee",
             "Unit 8: Bailment and Pledge",
@@ -250,10 +264,10 @@
         {
           title: "Ch 3: The Sale of Goods Act, 1930",
           units: [
-            "Unit 1: Formation of the Contract of Sale",
+            "Unit 1: Formation of Contract of Sale",
             "Unit 2: Conditions & Warranties",
-            "Unit 3: Transfer of Ownership and Delivery of Goods",
-            "Unit 4: Unpaid Seller"
+            "Unit 3: Transfer of Ownership & Delivery",
+            "Unit 4: Unpaid Seller Rights"
           ]
         },
         {
@@ -261,20 +275,20 @@
           units: [
             "Unit 1: General Nature of Partnership",
             "Unit 2: Relations of Partners",
-            "Unit 3: Registration and Dissolution of a Firm"
+            "Unit 3: Registration and Dissolution"
           ]
         },
         {
           title: "Ch 5: The Limited Liability Partnership Act, 2008",
-          units: ["Meaning, Incorporation, Partners & Differences"]
+          units: ["Features, Incorporation, Differences with Partnership"]
         },
         {
           title: "Ch 6: The Companies Act, 2013",
-          units: ["Meaning, Types of Companies, MOA, AOA & Incorporation"]
+          units: ["Company Characteristics, MOA, AOA, Incorporation Types"]
         },
         {
           title: "Ch 7: The Negotiable Instruments Act, 1881",
-          units: ["Promissory Notes, Bills of Exchange, Cheques, Negotiation & Crossing"]
+          units: ["Promissory Notes, Bills, Cheques, Crossing, Dishonour"]
         }
       ]
     },
@@ -284,20 +298,20 @@
         {
           title: "Part A: Business Mathematics",
           units: [
-            "Ch 1: Ratio and Proportion, Indices, Logarithms",
+            "Ch 1: Ratio, Proportion, Indices, Logarithms",
             "Ch 2: Equations (Linear, Quadratic, Matrices)",
             "Ch 3: Linear Inequalities",
-            "Ch 4: Mathematics of Finance (TVM, Annuities, Perpetuity)",
-            "Ch 5: Basic Concepts of Permutations and Combinations",
-            "Ch 6: Sequence and Series (Arithmetic & Geometric Progressions)",
-            "Ch 7: Sets, Relations, Functions, Limits and Continuity",
-            "Ch 8: Applications of Differential and Integral Calculus"
+            "Ch 4: Mathematics of Finance (TVM, Annuity)",
+            "Ch 5: Permutations and Combinations",
+            "Ch 6: Sequence and Series (AP & GP)",
+            "Ch 7: Sets, Relations, Functions, Limits",
+            "Ch 8: Calculus - Differential & Integral"
           ]
         },
         {
           title: "Part B: Logical Reasoning",
           units: [
-            "Ch 9: Number Series, Coding-Decoding and Odd Man Out",
+            "Ch 9: Number Series, Coding-Decoding, Odd Man Out",
             "Ch 10: Direction Tests",
             "Ch 11: Seating Arrangements",
             "Ch 12: Blood Relations"
@@ -306,8 +320,8 @@
         {
           title: "Part C: Statistics",
           units: [
-            "Ch 13: Statistical Representation of Data & Sampling",
-            "Ch 14: Measures of Central Tendency and Dispersion",
+            "Ch 13: Statistical Representation & Sampling",
+            "Ch 14: Central Tendency and Dispersion",
             "Ch 15: Probability",
             "Ch 16: Theoretical Distributions",
             "Ch 17: Correlation and Regression",
@@ -321,75 +335,43 @@
       chapters: [
         {
           title: "Ch 1: Nature and Scope of Business Economics",
-          units: [
-            "Unit 1: Introduction to Business Economics",
-            "Unit 2: Basic Problems of an Economy & Role of Price Mechanism"
-          ]
+          units: ["Unit 1: Intro to Business Econ", "Unit 2: Basic Problems & Price Mechanism"]
         },
         {
           title: "Ch 2: Theory of Demand and Supply",
-          units: [
-            "Unit 1: Law of Demand and Elasticity of Demand",
-            "Unit 2: Theory of Consumer Behaviour",
-            "Unit 3: Supply and Elasticity of Supply"
-          ]
+          units: ["Unit 1: Demand & Elasticity", "Unit 2: Consumer Behaviour", "Unit 3: Supply Analysis"]
         },
         {
           title: "Ch 3: Theory of Production and Cost",
-          units: [
-            "Unit 1: Theory of Production",
-            "Unit 2: Theory of Cost"
-          ]
+          units: ["Unit 1: Theory of Production", "Unit 2: Theory of Cost"]
         },
         {
           title: "Ch 4: Price Determination in Different Markets",
-          units: [
-            "Unit 1: Meaning and Types of Markets",
-            "Unit 2: Determination of Prices",
-            "Unit 3: Price-Output Determination under Different Forms"
-          ]
+          units: ["Unit 1: Market Forms", "Unit 2: Price Determination", "Unit 3: Price-Output Analysis"]
         },
         {
           title: "Ch 5: Business Cycles",
-          units: ["Phases, Features & Causes"]
+          units: ["Phases, Features & Causes of Business Cycles"]
         },
         {
           title: "Ch 6: Determination of National Income",
-          units: [
-            "Unit 1: National Income Accounting",
-            "Unit 2: The Keynesian Theory of Determination of National Income"
-          ]
+          units: ["Unit 1: National Income Accounting", "Unit 2: Keynesian Theory"]
         },
         {
           title: "Ch 7: Public Finance",
-          units: [
-            "Unit 1: Fiscal Functions: Overview, Centre & State Finance",
-            "Unit 2: Market Failure / Government Intervention",
-            "Unit 3: Budget Making: Revenue, Expenditure & Public Debt",
-            "Unit 4: Fiscal Policy"
-          ]
+          units: ["Unit 1: Fiscal Functions", "Unit 2: Market Failure", "Unit 3: Budget & Debt", "Unit 4: Fiscal Policy"]
         },
         {
           title: "Ch 8: Money Market",
-          units: [
-            "Unit 1: Concept of Money Demand & Important Theories",
-            "Unit 2: Concept of Money Supply",
-            "Unit 3: Monetary Policy"
-          ]
+          units: ["Unit 1: Money Demand", "Unit 2: Money Supply", "Unit 3: Monetary Policy"]
         },
         {
           title: "Ch 9: International Trade",
-          units: [
-            "Unit 1: Theories of International Trade",
-            "Unit 2: Instruments of Trade Policy",
-            "Unit 3: Trade Negotiations",
-            "Unit 4: Exchange Rate and Its Economic Effects",
-            "Unit 5: International Capital Movements"
-          ]
+          units: ["Unit 1: Trade Theories", "Unit 2: Trade Policy", "Unit 3: Negotiations", "Unit 4: Exchange Rates", "Unit 5: Capital Flows"]
         },
         {
           title: "Ch 10: Indian Economy",
-          units: ["Post-Independence Trends, Agriculture, Industry, Services & Reforms"]
+          units: ["Agriculture, Industry, Services & Economic Reforms"]
         }
       ]
     }
@@ -405,17 +387,14 @@
   function calculateCountdown() {
     const today = new Date();
     const examDate = new Date(DEFAULT_EXAM_DATE);
-    const diffTime = examDate - today;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.ceil((examDate - today) / (1000 * 60 * 60 * 24));
     return diffDays > 0 ? diffDays : 0;
   }
 
   function initCountdownAndStrategy() {
     const daysLeft = calculateCountdown();
-    const badge = document.getElementById("countdown-badge");
-    badge.innerText = `⏳ ${daysLeft} days until Jan 3 Exam`;
+    document.getElementById("countdown-badge").innerText = `⏳ ${daysLeft} days until Jan 3 Exam`;
 
-    // 80/20 Rule: 80% time / 4 subjects, 20% revision buffer
     const daysForSyllabus = Math.floor(daysLeft * 0.80);
     const daysPerSubject = Math.floor(daysForSyllabus / 4);
     const revisionBuffer = daysLeft - daysForSyllabus;
@@ -436,40 +415,137 @@
 
   function renderSubjectView() {
     const sub = document.getElementById("subject-select").value;
-    
     document.getElementById("rtp-checkbox").checked = !!appData.rtpDone[sub];
     document.getElementById("sub-mock-count").value = appData.mocksDone[sub] || "";
 
-    const container = document.getElementById("chapters-accordion");
+    const container = document.getElementById("chapters-list");
     container.innerHTML = "";
 
     SYLLABUS_TREE[sub].chapters.forEach((chap, cIdx) => {
+      const totalUnits = chap.units.length;
+      let completedUnitsCount = 0;
+
+      chap.units.forEach((_, uIdx) => {
+        if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) {
+          completedUnitsCount++;
+        }
+      });
+
+      const isAllDone = totalUnits > 0 && completedUnitsCount === totalUnits;
+      const pct = Math.round((completedUnitsCount / totalUnits) * 100);
+
+      // Build units list
       let unitsHtml = "";
-      chap.units.forEach((unitTitle, uIdx) => {
-        const key = `${sub}_c${cIdx}_u${uIdx}`;
-        const isDone = appData.completedUnits[key] ? "checked" : "";
+      chap.units.forEach((uTitle, uIdx) => {
+        const uKey = `${sub}_c${cIdx}_u${uIdx}`;
+        const isUnitDone = appData.completedUnits[uKey] ? "checked" : "";
         unitsHtml += `
           <label class="unit-item">
-            <input type="checkbox" onchange="toggleUnit('${key}', this.checked)" ${isDone}>
-            <span>${unitTitle}</span>
+            <input type="checkbox" ${isUnitDone} onchange="toggleSingleUnit('${sub}', ${cIdx}, ${uIdx}, this.checked)">
+            <span>${uTitle}</span>
           </label>`;
       });
 
-      container.innerHTML += `
-        <details class="chap-details" open>
-          <summary class="chap-summary">
-            <span>${chap.title}</span>
-            <span style="font-size:12px; color:var(--muted);">${chap.units.length} unit(s)</span>
-          </summary>
-          <div class="chap-units">${unitsHtml}</div>
-        </details>`;
+      const cardHtml = `
+        <div class="chapter-card" id="card-${sub}-${cIdx}">
+          <div class="chapter-header">
+            <div class="chapter-main-click">
+              <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
+              <span class="chapter-title">${chap.title}</span>
+            </div>
+            <button type="button" class="expand-btn" onclick="toggleUnitAccordion('units-${sub}-${cIdx}', this)">
+              <span>Units (${totalUnits})</span> ▾
+            </button>
+          </div>
+
+          <!-- In-Line Chapter Progress Bar -->
+          <div class="chap-progress-wrapper">
+            <div class="chap-meta">
+              <span id="chap-label-${sub}-${cIdx}">${completedUnitsCount} of ${totalUnits} units</span>
+              <span id="chap-pct-${sub}-${cIdx}"><strong>${pct}%</strong></span>
+            </div>
+            <div class="chap-progress-track">
+              <div class="chap-progress-fill" id="chap-bar-${sub}-${cIdx}" style="width:${pct}%;"></div>
+            </div>
+          </div>
+
+          <div class="units-list hidden" id="units-${sub}-${cIdx}">
+            ${unitsHtml}
+          </div>
+        </div>
+      `;
+      container.innerHTML += cardHtml;
     });
   }
 
-  function toggleUnit(key, status) {
-    if (status) appData.completedUnits[key] = true;
-    else delete appData.completedUnits[key];
+  // Toggle unit accordion
+  function toggleUnitAccordion(id, btn) {
+    const el = document.getElementById(id);
+    if (el.classList.contains("hidden")) {
+      el.classList.remove("hidden");
+      btn.innerHTML = btn.innerHTML.replace("▾", "▴");
+    } else {
+      el.classList.add("hidden");
+      btn.innerHTML = btn.innerHTML.replace("▴", "▾");
+    }
+  }
+
+  // Check/uncheck entire chapter
+  function toggleEntireChapter(sub, cIdx, isChecked) {
+    const chap = SYLLABUS_TREE[sub].chapters[cIdx];
+    chap.units.forEach((_, uIdx) => {
+      const uKey = `${sub}_c${cIdx}_u${uIdx}`;
+      if (isChecked) appData.completedUnits[uKey] = true;
+      else delete appData.completedUnits[uKey];
+    });
     saveToStorage();
+    refreshChapterProgress(sub, cIdx);
+  }
+
+  // Check/uncheck single unit
+  function toggleSingleUnit(sub, cIdx, uIdx, isChecked) {
+    const uKey = `${sub}_c${cIdx}_u${uIdx}`;
+    if (isChecked) appData.completedUnits[uKey] = true;
+    else delete appData.completedUnits[uKey];
+    saveToStorage();
+    refreshChapterProgress(sub, cIdx);
+  }
+
+  // Live in-line bar update without losing state
+  function refreshChapterProgress(sub, cIdx) {
+    const chap = SYLLABUS_TREE[sub].chapters[cIdx];
+    const totalUnits = chap.units.length;
+    let completedCount = 0;
+
+    chap.units.forEach((_, uIdx) => {
+      if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) {
+        completedCount++;
+      }
+    });
+
+    const isAllDone = totalUnits > 0 && completedCount === totalUnits;
+    const pct = Math.round((completedCount / totalUnits) * 100);
+
+    // Update chapter checkbox
+    const chapChk = document.getElementById(`chap-chk-${sub}-${cIdx}`);
+    if (chapChk) chapChk.checked = isAllDone;
+
+    // Update in-line progress UI
+    const bar = document.getElementById(`chap-bar-${sub}-${cIdx}`);
+    const label = document.getElementById(`chap-label-${sub}-${cIdx}`);
+    const pctLabel = document.getElementById(`chap-pct-${sub}-${cIdx}`);
+    if (bar) bar.style.width = `${pct}%`;
+    if (label) label.innerText = `${completedCount} of ${totalUnits} units`;
+    if (pctLabel) pctLabel.innerHTML = `<strong>${pct}%</strong>`;
+
+    // Sync unit checkboxes if needed
+    const unitsContainer = document.getElementById(`units-${sub}-${cIdx}`);
+    if (unitsContainer) {
+      const checkboxes = unitsContainer.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach((chk, idx) => {
+        chk.checked = !!appData.completedUnits[`${sub}_c${cIdx}_u${idx}`];
+      });
+    }
   }
 
   function updateRtp(status) {
@@ -559,11 +635,11 @@
     const revisionBuffer = daysLeft - daysForSyllabus;
 
     document.getElementById("strategy-reminder").innerHTML = `
-      <strong>Recommended Pacing (80/20 Rule):</strong> Target finishing 1st detailed pass within <strong>${daysPerSubject} days per paper</strong>, reserving the remaining <strong>${revisionBuffer} days</strong> exclusively for RTPs and timed 3-hour MTPs.
+      <strong>Recommended Pacing (80/20 Rule):</strong> Aim to complete 1st syllabus pass within <strong>${daysPerSubject} days per paper</strong>, reserving the remaining <strong>${revisionBuffer} days</strong> exclusively for RTPs and timed 3-hour MTPs.
     `;
   }
 
-  // Initial Boot
+  // Initial Load
   initCountdownAndStrategy();
   renderSubjectView();
 </script>
