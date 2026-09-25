@@ -35,28 +35,66 @@
     h2 { font-size: 17px; font-weight: 700; color: var(--primary); margin: 0 0 4px; }
     h3 { font-size: 14px; font-weight: 700; color: var(--primary); margin: 0 0 8px; }
     
-    label.field-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 12px; margin-bottom: 4px; }
+    label.field-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 14px; margin-bottom: 5px; }
+
+    /* HIGH VISIBILITY SUBJECT PICKER WRAPPER */
+    .subject-picker-container {
+      background: #f8faff;
+      border: 2px solid var(--brand);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.12);
+      position: relative;
+    }
+    .subject-picker-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--brand);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .subject-picker-select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      outline: none;
+      background: #ffffff;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+    }
+    .subject-picker-select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
     
-    select, input[type="number"], button {
+    input[type="number"], button {
       width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; background: #fff;
     }
-    select:focus, input:focus { border-color: var(--brand); }
     
     button.btn-primary { background: var(--brand); color: white; border: none; font-weight: 600; cursor: pointer; margin-top: 14px; border-radius: 8px; padding: 12px; font-size: 14px; }
     button.btn-primary:active { opacity: 0.9; }
 
     /* Compact Chapter Card */
     .chapter-card { border: 1px solid var(--border); border-radius: 10px; margin-top: 6px; background: #fff; overflow: hidden; }
-    
-    /* Line 1: Title & Main Checkbox */
-    .chap-line1 { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px 4px 10px; cursor: pointer; }
+    .chap-line1 { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; cursor: pointer; }
     .chap-line1 input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
     .chapter-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
 
-    /* Line 2: Progress-Pill Unit Button & Meta */
-    .chap-line2 { display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 8px 35px; gap: 10px; }
-    
-    /* Dynamic Progress Pill for Units */
+    /* Line 2 */
+    .chap-line2 { display: flex; align-items: center; justify-content: space-between; padding: 0 10px 8px 35px; gap: 10px; }
     .expand-btn {
       position: relative;
       border: 1px solid #cbd5e1;
@@ -75,7 +113,6 @@
       transition: background 0.3s ease;
     }
     .expand-btn:active { filter: brightness(0.95); }
-
     .chap-meta-text { font-size: 11px; color: var(--muted); font-weight: 500; }
 
     /* Compact Units Drawer */
@@ -84,15 +121,13 @@
     .unit-item:last-child { border-bottom: none; }
     .unit-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
 
-    /* Overall Readiness Gauge */
+    /* Progress & Dashboard */
     .progress-track { background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; margin: 6px 0 12px; }
     .progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.4s ease; }
-    
     .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1; }
     .hidden { display: none; }
 
     .sub-section { background: var(--brand-soft); border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid #bfdbfe; }
-    
     .strategy-card { background: #fffbeb; border: 1px solid #fef08a; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
     .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
     .strategy-box { background: #fff; border-radius: 6px; padding: 6px; border: 1px solid #fef9c3; text-align: center; }
@@ -135,15 +170,18 @@
   <!-- SCREEN 1: INPUT AND LOGGING -->
   <div id="page-input" class="card">
     <h2>Daily Revision Tracker</h2>
-    <p style="font-size: 12px; color: var(--muted); margin: 0 0 8px;">Check entire chapter or tap units. Saved on your device.</p>
+    <p style="font-size: 12px; color: var(--muted); margin: 0 0 6px;">Check entire chapter or tap units. Saved on your device.</p>
 
-    <label class="field-label">Subject</label>
-    <select id="subject-select" onchange="renderSubjectView()">
-      <option value="p1">Paper 1: Accounting (100 Marks)</option>
-      <option value="p2">Paper 2: Business Laws (100 Marks)</option>
-      <option value="p3">Paper 3: Quantitative Aptitude (100 Marks)</option>
-      <option value="p4">Paper 4: Business Economics (100 Marks)</option>
-    </select>
+    <!-- EYE-CATCHING SUBJECT SELECTOR CARD -->
+    <div class="subject-picker-container">
+      <div class="subject-picker-badge">📚 Choose Subject to Update</div>
+      <select id="subject-select" class="subject-picker-select" onchange="renderSubjectView()">
+        <option value="p1">Paper 1: Accounting (100 Marks)</option>
+        <option value="p2">Paper 2: Business Laws (100 Marks)</option>
+        <option value="p3">Paper 3: Quantitative Aptitude (100 Marks)</option>
+        <option value="p4">Paper 4: Business Economics (100 Marks)</option>
+      </select>
+    </div>
 
     <!-- PRACTICE METRICS -->
     <div class="sub-section">
@@ -216,22 +254,10 @@
             "Unit 6: Rectification of Errors"
           ]
         },
-        {
-          title: "Ch 3: Bank Reconciliation Statement",
-          units: ["BRS Concepts, Causes of Differences & Adjustments"]
-        },
-        {
-          title: "Ch 4: Inventories",
-          units: ["Cost Formulas, FIFO, Weighted Avg & Valuation"]
-        },
-        {
-          title: "Ch 5: Depreciation & Amortisation",
-          units: ["Methods of Depreciation, Changes & Computation"]
-        },
-        {
-          title: "Ch 6: Bills of Exchange & Promissory Notes",
-          units: ["Dishonour, Renewal & Accommodation Bills"]
-        },
+        { title: "Ch 3: Bank Reconciliation Statement", units: ["BRS Concepts, Causes of Differences & Adjustments"] },
+        { title: "Ch 4: Inventories", units: ["Cost Formulas, FIFO, Weighted Avg & Valuation"] },
+        { title: "Ch 5: Depreciation & Amortisation", units: ["Methods of Depreciation, Changes & Computation"] },
+        { title: "Ch 6: Bills of Exchange & Promissory Notes", units: ["Dishonour, Renewal & Accommodation Bills"] },
         {
           title: "Ch 7: Final Accounts of Sole Proprietors",
           units: [
@@ -239,14 +265,8 @@
             "Unit 2: Manufacturing Entities"
           ]
         },
-        {
-          title: "Ch 8: Financial Statements of NPO",
-          units: ["Receipts & Payments, Income & Expenditure, Balance Sheet"]
-        },
-        {
-          title: "Ch 9: Accounts from Incomplete Records",
-          units: ["Single Entry System & Statement of Affairs"]
-        },
+        { title: "Ch 8: Financial Statements of NPO", units: ["Receipts & Payments, Income & Expenditure, Balance Sheet"] },
+        { title: "Ch 9: Accounts from Incomplete Records", units: ["Single Entry System & Statement of Affairs"] },
         {
           title: "Ch 10: Partnership and LLP Accounts",
           units: [
@@ -274,10 +294,7 @@
     p2: {
       name: "Paper 2: Business Laws",
       chapters: [
-        {
-          title: "Ch 1: Indian Regulatory Framework",
-          units: ["Sources of Law, Regulatory Bodies & Court Hierarchy"]
-        },
+        { title: "Ch 1: Indian Regulatory Framework", units: ["Sources of Law, Regulatory Bodies & Court Hierarchy"] },
         {
           title: "Ch 2: The Indian Contract Act, 1872",
           units: [
@@ -309,18 +326,9 @@
             "Unit 3: Registration & Dissolution"
           ]
         },
-        {
-          title: "Ch 5: The Limited Liability Partnership Act",
-          units: ["Characteristics, Incorporation & Partner Relations"]
-        },
-        {
-          title: "Ch 6: The Companies Act, 2013",
-          units: ["Company Types, MOA, AOA & Incorporation"]
-        },
-        {
-          title: "Ch 7: The Negotiable Instruments Act",
-          units: ["Promissory Notes, Cheques, Negotiation & Dishonour"]
-        }
+        { title: "Ch 5: The Limited Liability Partnership Act", units: ["Characteristics, Incorporation & Partner Relations"] },
+        { title: "Ch 6: The Companies Act, 2013", units: ["Company Types, MOA, AOA & Incorporation"] },
+        { title: "Ch 7: The Negotiable Instruments Act", units: ["Promissory Notes, Cheques, Negotiation & Dishonour"] }
       ]
     },
     p3: {
@@ -364,46 +372,16 @@
     p4: {
       name: "Paper 4: Business Economics",
       chapters: [
-        {
-          title: "Ch 1: Nature & Scope of Economics",
-          units: ["Unit 1: Intro to Economics", "Unit 2: Basic Problems & Price Mechanism"]
-        },
-        {
-          title: "Ch 2: Theory of Demand and Supply",
-          units: ["Unit 1: Demand & Elasticity", "Unit 2: Consumer Behaviour", "Unit 3: Supply Analysis"]
-        },
-        {
-          title: "Ch 3: Theory of Production & Cost",
-          units: ["Unit 1: Theory of Production", "Unit 2: Theory of Cost"]
-        },
-        {
-          title: "Ch 4: Market Price Determination",
-          units: ["Unit 1: Market Forms", "Unit 2: Price Determination", "Unit 3: Price-Output Analysis"]
-        },
-        {
-          title: "Ch 5: Business Cycles",
-          units: ["Phases, Features & Causes of Business Cycles"]
-        },
-        {
-          title: "Ch 6: Determination of National Income",
-          units: ["Unit 1: National Income Accounting", "Unit 2: Keynesian Theory"]
-        },
-        {
-          title: "Ch 7: Public Finance",
-          units: ["Unit 1: Fiscal Functions", "Unit 2: Market Failure", "Unit 3: Budget & Debt", "Unit 4: Fiscal Policy"]
-        },
-        {
-          title: "Ch 8: Money Market",
-          units: ["Unit 1: Money Demand", "Unit 2: Money Supply", "Unit 3: Monetary Policy"]
-        },
-        {
-          title: "Ch 9: International Trade",
-          units: ["Unit 1: Trade Theories", "Unit 2: Trade Policy", "Unit 3: Negotiations", "Unit 4: Exchange Rates", "Unit 5: Capital Flows"]
-        },
-        {
-          title: "Ch 10: Indian Economy",
-          units: ["Agriculture, Industry, Services & Economic Reforms"]
-        }
+        { title: "Ch 1: Nature & Scope of Economics", units: ["Unit 1: Intro to Economics", "Unit 2: Basic Problems & Price Mechanism"] },
+        { title: "Ch 2: Theory of Demand and Supply", units: ["Unit 1: Demand & Elasticity", "Unit 2: Consumer Behaviour", "Unit 3: Supply Analysis"] },
+        { title: "Ch 3: Theory of Production & Cost", units: ["Unit 1: Theory of Production", "Unit 2: Theory of Cost"] },
+        { title: "Ch 4: Market Price Determination", units: ["Unit 1: Market Forms", "Unit 2: Price Determination", "Unit 3: Price-Output Analysis"] },
+        { title: "Ch 5: Business Cycles", units: ["Phases, Features & Causes of Business Cycles"] },
+        { title: "Ch 6: Determination of National Income", units: ["Unit 1: National Income Accounting", "Unit 2: Keynesian Theory"] },
+        { title: "Ch 7: Public Finance", units: ["Unit 1: Fiscal Functions", "Unit 2: Market Failure", "Unit 3: Budget & Debt", "Unit 4: Fiscal Policy"] },
+        { title: "Ch 8: Money Market", units: ["Unit 1: Money Demand", "Unit 2: Money Supply", "Unit 3: Monetary Policy"] },
+        { title: "Ch 9: International Trade", units: ["Unit 1: Trade Theories", "Unit 2: Trade Policy", "Unit 3: Negotiations", "Unit 4: Exchange Rates", "Unit 5: Capital Flows"] },
+        { title: "Ch 10: Indian Economy", units: ["Agriculture, Industry, Services & Economic Reforms"] }
       ]
     }
   };
@@ -480,28 +458,29 @@
           </label>`;
       });
 
+      const hasMultipleUnits = totalUnits > 1;
+
       const cardHtml = `
         <div class="chapter-card" id="card-${sub}-${cIdx}">
-          <!-- Line 1: Full Chapter Title & Box -->
           <div class="chap-line1" onclick="handleTitleRowClick(event, '${sub}', ${cIdx})">
             <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
             <span class="chapter-title">${chap.title}</span>
           </div>
 
-          <!-- Line 2: Progress-Pill Unit Button & Meta -->
+          ${hasMultipleUnits ? `
           <div class="chap-line2">
             <button type="button" class="expand-btn" id="btn-${sub}-${cIdx}" 
               style="background: ${bgGradient};"
               onclick="toggleUnitAccordion('units-${sub}-${cIdx}', this)">
-              <span id="btn-text-${sub}-${cIdx}">▾ ${totalUnits} ${totalUnits === 1 ? 'Unit' : 'Units'}</span>
+              <span id="btn-text-${sub}-${cIdx}">▾ ${totalUnits} Units</span>
             </button>
-            <span class="chap-meta-text" id="chap-label-${sub}-${cIdx}">${completedUnitsCount}/${totalUnits} • ${pct}%</span>
+            <span class="chap-meta-text" id="chap-label-${sub}-${cIdx}">${completedUnitsCount}/${totalUnits} •${pct}%</span>
           </div>
 
-          <!-- Recessed Units Drawer -->
           <div class="units-list hidden" id="units-${sub}-${cIdx}">
             ${unitsHtml}
           </div>
+          ` : ''}
         </div>
       `;
       container.innerHTML += cardHtml;
@@ -517,6 +496,7 @@
 
   function toggleUnitAccordion(id, btn) {
     const el = document.getElementById(id);
+    if (!el) return;
     const textSpan = btn.querySelector("span");
     if (el.classList.contains("hidden")) {
       el.classList.remove("hidden");
@@ -565,7 +545,6 @@
     const chapChk = document.getElementById(`chap-chk-${sub}-${cIdx}`);
     if (chapChk) chapChk.checked = isAllDone;
 
-    // Update Progress Pill Background Gradient
     const btn = document.getElementById(`btn-${sub}-${cIdx}`);
     if (btn) btn.style.background = getButtonProgressGradient(pct);
 
