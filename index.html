@@ -20,7 +20,7 @@
       --brand: #2563eb;
       --brand-soft: #eff6ff;
       --success: #10b981;
-      --bg: #f1f5f9;
+      --bg: #f8fafc;
       --card: #ffffff;
       --border: #e2e8f0;
       --text: #1e293b;
@@ -29,64 +29,62 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; }
     .container { max-width: 480px; margin: 0 auto; padding: 12px; }
-    .card { background: var(--card); border-radius: 16px; padding: 16px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px; }
+    .card { background: var(--card); border-radius: 14px; padding: 14px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-bottom: 12px; }
     
-    h2 { font-size: 18px; font-weight: 700; color: var(--primary); margin: 0 0 4px; }
-    h3 { font-size: 15px; font-weight: 700; color: var(--primary); margin: 0 0 8px; }
+    h2 { font-size: 17px; font-weight: 700; color: var(--primary); margin: 0 0 4px; }
+    h3 { font-size: 14px; font-weight: 700; color: var(--primary); margin: 0 0 8px; }
     
-    label.field-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 14px; margin-bottom: 6px; }
+    label.field-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 12px; margin-bottom: 4px; }
     
     select, input[type="number"], button {
-      width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; outline: none; background: #fff;
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; background: #fff;
     }
-    select:focus, input:focus { border-color: var(--brand); box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
+    select:focus, input:focus { border-color: var(--brand); }
     
-    button.btn-primary { background: var(--brand); color: white; border: none; font-weight: 600; cursor: pointer; margin-top: 16px; border-radius: 10px; padding: 12px; font-size: 15px; }
+    button.btn-primary { background: var(--brand); color: white; border: none; font-weight: 600; cursor: pointer; margin-top: 14px; border-radius: 8px; padding: 12px; font-size: 14px; }
     button.btn-primary:active { opacity: 0.9; }
 
-    /* Compact Chapter List */
-    .chapter-card { border: 1px solid var(--border); border-radius: 12px; margin-top: 8px; background: #fff; transition: border-color 0.2s; overflow: hidden; }
-    .chapter-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 12px; gap: 10px; }
+    /* High-Density Chapter Card */
+    .chapter-card { border: 1px solid var(--border); border-radius: 10px; margin-top: 6px; background: #fff; overflow: hidden; }
     
-    .chapter-main-click { display: flex; align-items: flex-start; gap: 10px; flex: 1; cursor: pointer; }
-    .chapter-title { font-size: 13.5px; font-weight: 600; color: var(--text); line-height: 1.35; padding-top: 1px; }
+    /* Line 1: Title & Main Checkbox */
+    .chap-line1 { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px 4px 10px; cursor: pointer; }
+    .chap-line1 input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
+    .chapter-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
+
+    /* Line 2: Left drop-down, Right progress bar */
+    .chap-line2 { display: flex; align-items: center; justify-content: space-between; padding: 2px 10px 8px 35px; gap: 10px; }
     
-    /* Sleek Mini-Pill Button */
     .expand-btn {
-      background: #f1f5f9; border: none; border-radius: 20px; padding: 4px 9px; font-size: 11px; font-weight: 600; color: var(--brand); cursor: pointer; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; flex-shrink: 0;
+      background: #f1f5f9; border: none; border-radius: 12px; padding: 3px 8px; font-size: 11px; font-weight: 600; color: var(--brand); cursor: pointer; display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0;
     }
     .expand-btn:active { background: #e2e8f0; }
-    
-    /* Sleek In-Line Progress */
-    .chap-progress-wrapper { padding: 0 12px 10px 38px; }
-    .chap-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-    .chap-progress-track { background: #f1f5f9; border-radius: 999px; height: 4px; overflow: hidden; }
-    .chap-progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.3s ease; }
 
-    /* Compact Units Box */
-    .units-list { border-top: 1px dashed var(--border); padding: 6px 12px 6px 36px; background: #fafafa; }
-    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; line-height: 1.35; color: #475569; }
+    .chap-bar-container { display: flex; align-items: center; gap: 6px; flex: 1; justify-content: flex-end; }
+    .chap-progress-track { background: #f1f5f9; border-radius: 999px; height: 5px; width: 60px; overflow: hidden; }
+    .chap-progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.3s ease; }
+    .chap-meta-text { font-size: 10.5px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+
+    /* Compact Units Drawer */
+    .units-list { border-top: 1px dashed var(--border); padding: 4px 10px 6px 34px; background: #f8fafc; }
+    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid #f1f5f9; font-size: 11.5px; line-height: 1.3; color: #475569; }
     .unit-item:last-child { border-bottom: none; }
-    
-    input[type="checkbox"] {
-      width: 17px; height: 17px; accent-color: var(--brand); cursor: pointer; margin: 0; flex-shrink: 0;
-    }
+    .unit-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
 
     /* Overall Readiness Gauge */
-    .progress-track { background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; margin: 6px 0 14px; }
+    .progress-track { background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; margin: 6px 0 12px; }
     .progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.4s ease; }
     
-    .badge { display: inline-block; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1; }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1; }
     .hidden { display: none; }
 
-    .sub-section { background: var(--brand-soft); border-radius: 10px; padding: 12px; margin-top: 12px; border: 1px solid #bfdbfe; }
+    .sub-section { background: var(--brand-soft); border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid #bfdbfe; }
     
-    /* Strategy Banner */
-    .strategy-card { background: #fffbeb; border: 1px solid #fef08a; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
-    .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-    .strategy-box { background: #fff; border-radius: 8px; padding: 8px; border: 1px solid #fef9c3; text-align: center; }
-    .strategy-box strong { display: block; font-size: 16px; color: #854d0e; }
-    .strategy-box span { font-size: 11px; color: #a16207; }
+    .strategy-card { background: #fffbeb; border: 1px solid #fef08a; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+    .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+    .strategy-box { background: #fff; border-radius: 6px; padding: 6px; border: 1px solid #fef9c3; text-align: center; }
+    .strategy-box strong { display: block; font-size: 15px; color: #854d0e; }
+    .strategy-box span { font-size: 10.5px; color: #a16207; }
   </style>
 </head>
 <body>
@@ -94,9 +92,9 @@
 
   <!-- FIRST TIME ONBOARDING STRATEGY -->
   <div id="first-time-strategy" class="strategy-card hidden">
-    <h3 style="color:#854d0e; margin:0 0 4px;">🎯 Exam Pacing Split</h3>
-    <p style="font-size:12px; color:#713f12; margin:0 0 8px; line-height:1.4;">
-      Exam starts <strong>Jan 3, 2027</strong>. Your available time is balanced between deep study and mock exams:
+    <h3 style="color:#854d0e; margin:0 0 2px;">🎯 Exam Pacing Split</h3>
+    <p style="font-size:11.5px; color:#713f12; margin:0 0 6px; line-height:1.35;">
+      Exam starts <strong>Jan 3, 2027</strong>. Recommended distribution:
     </p>
 
     <div class="strategy-grid">
@@ -110,13 +108,13 @@
       </div>
     </div>
 
-    <button onclick="dismissFirstTimeModal()" style="background:#d97706; color:#fff; border:none; padding:8px; font-size:13px; font-weight:600; border-radius:6px; margin-top:10px; width:100%; cursor:pointer;">
+    <button onclick="dismissFirstTimeModal()" style="background:#d97706; color:#fff; border:none; padding:7px; font-size:12px; font-weight:600; border-radius:6px; margin-top:8px; width:100%; cursor:pointer;">
       Got It, Continue
     </button>
   </div>
 
   <!-- COUNTDOWN HEADER -->
-  <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; padding: 0 2px;">
+  <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; padding: 0 2px;">
     <div id="countdown-badge" class="badge">⏳ Calculating days...</div>
     <span style="font-size:11px; color:var(--muted); font-weight:500;">Jan 3, 5, 7, 9 Schedule</span>
   </div>
@@ -124,7 +122,7 @@
   <!-- SCREEN 1: INPUT AND LOGGING -->
   <div id="page-input" class="card">
     <h2>Daily Revision Tracker</h2>
-    <p style="font-size: 12.5px; color: var(--muted); margin: 0 0 10px;">Check completed chapters or expand units. Saved privately on this device.</p>
+    <p style="font-size: 12px; color: var(--muted); margin: 0 0 8px;">Check entire chapter or tap units. Saved on your device.</p>
 
     <label class="field-label">Subject</label>
     <select id="subject-select" onchange="renderSubjectView()">
@@ -136,14 +134,14 @@
 
     <!-- RTP & MOCK INPUTS -->
     <div class="sub-section">
-      <div style="font-size:12px; font-weight:700; color:var(--brand); text-transform:uppercase; margin-bottom:6px;">Exam Practice Status</div>
+      <div style="font-size:11px; font-weight:700; color:var(--brand); text-transform:uppercase; margin-bottom:4px;">Exam Practice Status</div>
       <label class="unit-item" style="border:none; padding:0; color:#1e293b; font-weight:500;">
         <input type="checkbox" id="rtp-checkbox" onchange="updateRtp(this.checked)">
         <span>ICAI Revision Test Paper (RTP) Completed</span>
       </label>
-      <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
-        <span style="font-size:12px; color:#334155; font-weight:500; flex:1;">Mock Exams Written:</span>
-        <input type="number" id="sub-mock-count" min="0" placeholder="0" onchange="updateSubMock(this.value)" style="width:70px; padding:6px 8px; margin:0; text-align:center;">
+      <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
+        <span style="font-size:11.5px; color:#334155; font-weight:500; flex:1;">Mock Exams Written:</span>
+        <input type="number" id="sub-mock-count" min="0" placeholder="0" onchange="updateSubMock(this.value)" style="width:60px; padding:5px 6px; margin:0; text-align:center; font-size:13px;">
       </div>
     </div>
 
@@ -157,18 +155,18 @@
   <div id="page-dashboard" class="card hidden">
     <h2>Revision Readiness</h2>
 
-    <div style="font-size:12.5px; font-weight:600; margin-top:8px;">
+    <div style="font-size:12px; font-weight:600; margin-top:6px;">
       Total Exam Readiness (70% Syllabus + 15% RTPs + 15% Mocks)
     </div>
     <div class="progress-track"><div id="overall-bar" class="progress-fill" style="background:var(--success);"></div></div>
-    <div id="overall-label" style="font-size:13px; font-weight:700; text-align:right; margin-top:-10px;">0% Ready</div>
+    <div id="overall-label" style="font-size:12px; font-weight:700; text-align:right; margin-top:-8px;">0% Ready</div>
 
-    <h3 style="margin-top:16px;">Subject Completion</h3>
+    <h3 style="margin-top:14px;">Subject Completion</h3>
     <div id="subject-bars-container"></div>
 
-    <div id="strategy-reminder" style="font-size:11.5px; color:var(--muted); border-top:1px solid var(--border); padding-top:10px; margin-top:12px; line-height:1.4;"></div>
+    <div id="strategy-reminder" style="font-size:11px; color:var(--muted); border-top:1px solid var(--border); padding-top:8px; margin-top:10px; line-height:1.35;"></div>
 
-    <button onclick="showInputPage()" style="background:#475569; color:#fff; border:none; border-radius:10px; padding:11px; width:100%; margin-top:14px; font-weight:600; font-size:14px; cursor:pointer;">
+    <button onclick="showInputPage()" style="background:#475569; color:#fff; border:none; border-radius:8px; padding:10px; width:100%; margin-top:12px; font-weight:600; font-size:13px; cursor:pointer;">
       + Log More Chapters / Edit
     </button>
   </div>
@@ -207,7 +205,7 @@
         },
         {
           title: "Ch 3: Bank Reconciliation Statement",
-          units: ["BRS Concepts, Causes of Differences & Problems"]
+          units: ["BRS Concepts, Causes of Differences & Adjustments"]
         },
         {
           title: "Ch 4: Inventories",
@@ -465,26 +463,26 @@
 
       const cardHtml = `
         <div class="chapter-card" id="card-${sub}-${cIdx}">
-          <div class="chapter-header">
-            <div class="chapter-main-click">
-              <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
-              <span class="chapter-title">${chap.title}</span>
-            </div>
+          <!-- Line 1: Full Chapter Title and Checkbox -->
+          <div class="chap-line1" onclick="handleTitleRowClick(event, '${sub}', ${cIdx})">
+            <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
+            <span class="chapter-title">${chap.title}</span>
+          </div>
+
+          <!-- Line 2: Left drop-down & Right completion bar -->
+          <div class="chap-line2">
             <button type="button" class="expand-btn" onclick="toggleUnitAccordion('units-${sub}-${cIdx}', this)">
               <span>▾ ${totalUnits} ${totalUnits === 1 ? 'Unit' : 'Units'}</span>
             </button>
-          </div>
-
-          <div class="chap-progress-wrapper">
-            <div class="chap-meta">
-              <span id="chap-label-${sub}-${cIdx}">${completedUnitsCount}/${totalUnits} completed</span>
-              <span id="chap-pct-${sub}-${cIdx}">${pct}%</span>
-            </div>
-            <div class="chap-progress-track">
-              <div class="chap-progress-fill" id="chap-bar-${sub}-${cIdx}" style="width:${pct}%;"></div>
+            <div class="chap-bar-container">
+              <span class="chap-meta-text" id="chap-label-${sub}-${cIdx}">${completedUnitsCount}/${totalUnits} • ${pct}%</span>
+              <div class="chap-progress-track">
+                <div class="chap-progress-fill" id="chap-bar-${sub}-${cIdx}" style="width:${pct}%;"></div>
+              </div>
             </div>
           </div>
 
+          <!-- Recessed Units Drawer -->
           <div class="units-list hidden" id="units-${sub}-${cIdx}">
             ${unitsHtml}
           </div>
@@ -492,6 +490,13 @@
       `;
       container.innerHTML += cardHtml;
     });
+  }
+
+  function handleTitleRowClick(e, sub, cIdx) {
+    if (e.target.tagName.toLowerCase() === 'input') return;
+    const chk = document.getElementById(`chap-chk-${sub}-${cIdx}`);
+    chk.checked = !chk.checked;
+    toggleEntireChapter(sub, cIdx, chk.checked);
   }
 
   function toggleUnitAccordion(id, btn) {
@@ -543,10 +548,8 @@
 
     const bar = document.getElementById(`chap-bar-${sub}-${cIdx}`);
     const label = document.getElementById(`chap-label-${sub}-${cIdx}`);
-    const pctLabel = document.getElementById(`chap-pct-${sub}-${cIdx}`);
     if (bar) bar.style.width = `${pct}%`;
-    if (label) label.innerText = `${completedCount}/${totalUnits} completed`;
-    if (pctLabel) pctLabel.innerText = `${pct}%`;
+    if (label) label.innerText = `${completedCount}/${totalUnits} • ${pct}%`;
 
     const unitsContainer = document.getElementById(`units-${sub}-${cIdx}`);
     if (unitsContainer) {
@@ -617,13 +620,13 @@
       const mocks = appData.mocksDone[subKey] || 0;
 
       barsDiv.innerHTML += `
-        <div style="margin-top:12px;">
-          <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;">
+        <div style="margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:600;">
             <span>${SYLLABUS_TREE[subKey].name}</span>
             <span>${subPct}% (${subDone}/${subUnits})</span>
           </div>
           <div class="progress-track"><div class="progress-fill" style="width:${subPct}%"></div></div>
-          <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:-10px;">
+          <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:-8px;">
             <span>${isRtp}</span>
             <span>Mocks Written: ${mocks}</span>
           </div>
