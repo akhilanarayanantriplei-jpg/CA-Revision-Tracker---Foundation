@@ -16,71 +16,87 @@
 
   <style>
     :root {
-      --primary: #1e3a8a;
-      --primary-light: #eff6ff;
-      --accent: #2563eb;
-      --success: #16a34a;
-      --bg: #f8fafc;
+      --primary: #0f172a;
+      --brand: #2563eb;
+      --brand-soft: #eff6ff;
+      --success: #10b981;
+      --bg: #f1f5f9;
       --card: #ffffff;
       --border: #e2e8f0;
-      --text: #0f172a;
+      --text: #1e293b;
       --muted: #64748b;
     }
-    * { box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; }
-    .container { max-width: 500px; margin: 0 auto; padding: 14px; }
-    .card { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.04); margin-bottom: 16px; }
-    h2, h3 { margin: 0 0 10px 0; color: var(--primary); }
-    label { font-size: 13px; font-weight: 600; color: #334155; display: block; margin-top: 14px; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; }
+    .container { max-width: 480px; margin: 0 auto; padding: 12px; }
+    .card { background: var(--card); border-radius: 16px; padding: 16px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px; }
+    
+    h2 { font-size: 18px; font-weight: 700; color: var(--primary); margin: 0 0 4px; }
+    h3 { font-size: 15px; font-weight: 700; color: var(--primary); margin: 0 0 8px; }
+    
+    label.field-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 14px; margin-bottom: 6px; }
+    
     select, input[type="number"], button {
-      width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 8px; margin-top: 6px; font-size: 15px; outline: none;
+      width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; outline: none; background: #fff;
     }
-    select:focus, input:focus { border-color: var(--accent); }
-    button { background: var(--primary); color: white; border: none; font-weight: 700; cursor: pointer; margin-top: 18px; transition: background 0.2s; border-radius: 8px; }
-    button:active { background: #172554; }
-
-    /* Chapter Card Styles */
-    .chapter-card { border: 1.5px solid var(--border); border-radius: 10px; margin-top: 10px; background: #fff; overflow: hidden; }
-    .chapter-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #f8fafc; gap: 8px; }
-    .chapter-main-click { display: flex; align-items: center; gap: 10px; flex: 1; cursor: pointer; }
-    .chapter-title { font-size: 13.5px; font-weight: 600; color: #1e293b; }
-    .expand-btn { background: #e2e8f0; border: none; border-radius: 6px; padding: 5px 8px; font-size: 11px; font-weight: 700; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 3px; }
+    select:focus, input:focus { border-color: var(--brand); box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
     
-    /* In-line Chapter Progress Bar */
-    .chap-progress-wrapper { padding: 4px 12px 10px; background: #f8fafc; }
+    button.btn-primary { background: var(--brand); color: white; border: none; font-weight: 600; cursor: pointer; margin-top: 16px; border-radius: 10px; padding: 12px; font-size: 15px; }
+    button.btn-primary:active { opacity: 0.9; }
+
+    /* Compact Chapter List */
+    .chapter-card { border: 1px solid var(--border); border-radius: 12px; margin-top: 8px; background: #fff; transition: border-color 0.2s; overflow: hidden; }
+    .chapter-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 12px; gap: 10px; }
+    
+    .chapter-main-click { display: flex; align-items: flex-start; gap: 10px; flex: 1; cursor: pointer; }
+    .chapter-title { font-size: 13.5px; font-weight: 600; color: var(--text); line-height: 1.35; padding-top: 1px; }
+    
+    /* Sleek Mini-Pill Button */
+    .expand-btn {
+      background: #f1f5f9; border: none; border-radius: 20px; padding: 4px 9px; font-size: 11px; font-weight: 600; color: var(--brand); cursor: pointer; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; flex-shrink: 0;
+    }
+    .expand-btn:active { background: #e2e8f0; }
+    
+    /* Sleek In-Line Progress */
+    .chap-progress-wrapper { padding: 0 12px 10px 38px; }
     .chap-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-    .chap-progress-track { background: #e2e8f0; border-radius: 999px; height: 6px; overflow: hidden; }
-    .chap-progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+    .chap-progress-track { background: #f1f5f9; border-radius: 999px; height: 4px; overflow: hidden; }
+    .chap-progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.3s ease; }
 
-    /* Unit Sub-List */
-    .units-list { border-top: 1px solid var(--border); padding: 8px 14px 10px 34px; background: #ffffff; }
-    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 12.5px; line-height: 1.35; color: #475569; }
+    /* Compact Units Box */
+    .units-list { border-top: 1px dashed var(--border); padding: 6px 12px 6px 36px; background: #fafafa; }
+    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; line-height: 1.35; color: #475569; }
     .unit-item:last-child { border-bottom: none; }
-    .unit-item input[type="checkbox"], .chapter-header input[type="checkbox"] {
-      width: 17px; height: 17px; cursor: pointer; margin-top: 1px; flex-shrink: 0;
+    
+    input[type="checkbox"] {
+      width: 17px; height: 17px; accent-color: var(--brand); cursor: pointer; margin: 0; flex-shrink: 0;
     }
 
-    .progress-track { background: #e2e8f0; border-radius: 999px; height: 12px; overflow: hidden; margin: 6px 0 14px; }
-    .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; }
-    .badge { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; background: #e0f2fe; color: #0369a1; }
-    .hidden { display: none; }
-    .sub-section { background: var(--primary-light); border-radius: 8px; padding: 12px; margin-top: 14px; border: 1px solid #bfdbfe; }
+    /* Overall Readiness Gauge */
+    .progress-track { background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; margin: 6px 0 14px; }
+    .progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.4s ease; }
     
-    .strategy-card { background: #fefce8; border: 1.5px solid #fde047; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-    .strategy-box { background: #fff; border-radius: 8px; padding: 10px; border: 1px solid #fef08a; text-align: center; }
-    .strategy-box strong { display: block; font-size: 18px; color: #854d0e; }
-    .strategy-box span { font-size: 11.5px; color: #713f12; }
+    .badge { display: inline-block; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1; }
+    .hidden { display: none; }
+
+    .sub-section { background: var(--brand-soft); border-radius: 10px; padding: 12px; margin-top: 12px; border: 1px solid #bfdbfe; }
+    
+    /* Strategy Banner */
+    .strategy-card { background: #fffbeb; border: 1px solid #fef08a; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .strategy-box { background: #fff; border-radius: 8px; padding: 8px; border: 1px solid #fef9c3; text-align: center; }
+    .strategy-box strong { display: block; font-size: 16px; color: #854d0e; }
+    .strategy-box span { font-size: 11px; color: #a16207; }
   </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- FIRST TIME ONBOARDING: 80/20 TIME SPLIT -->
+  <!-- FIRST TIME ONBOARDING STRATEGY -->
   <div id="first-time-strategy" class="strategy-card hidden">
-    <h3 style="color:#854d0e; margin:0 0 6px;">🎯 Exam Countdown & Strategy</h3>
-    <p style="font-size:13px; color:#713f12; margin:0 0 10px; line-height:1.4;">
-      Exam starts on <strong>January 3, 2027</strong> (Jan 3, 5, 7, 9). Time allocation guideline:
+    <h3 style="color:#854d0e; margin:0 0 4px;">🎯 Exam Pacing Split</h3>
+    <p style="font-size:12px; color:#713f12; margin:0 0 8px; line-height:1.4;">
+      Exam starts <strong>Jan 3, 2027</strong>. Your available time is balanced between deep study and mock exams:
     </p>
 
     <div class="strategy-grid">
@@ -94,23 +110,23 @@
       </div>
     </div>
 
-    <button onclick="dismissFirstTimeModal()" style="background:#ca8a04; color:#fff; padding:10px; font-size:14px; margin-top:12px;">
-      Got It, Start Revision!
+    <button onclick="dismissFirstTimeModal()" style="background:#d97706; color:#fff; border:none; padding:8px; font-size:13px; font-weight:600; border-radius:6px; margin-top:10px; width:100%; cursor:pointer;">
+      Got It, Continue
     </button>
   </div>
 
-  <!-- COUNTDOWN BADGE -->
-  <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+  <!-- COUNTDOWN HEADER -->
+  <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; padding: 0 2px;">
     <div id="countdown-badge" class="badge">⏳ Calculating days...</div>
-    <span style="font-size:11px; color:var(--muted);">CA Foundation (Jan 3, 5, 7, 9)</span>
+    <span style="font-size:11px; color:var(--muted); font-weight:500;">Jan 3, 5, 7, 9 Schedule</span>
   </div>
 
   <!-- SCREEN 1: INPUT AND LOGGING -->
   <div id="page-input" class="card">
     <h2>Daily Revision Tracker</h2>
-    <p style="font-size: 13px; color: var(--muted); margin: 0 0 12px;">Tick an entire chapter, or tap <strong>Units</strong> to select specific parts.</p>
+    <p style="font-size: 12.5px; color: var(--muted); margin: 0 0 10px;">Check completed chapters or expand units. Saved privately on this device.</p>
 
-    <label>Select Subject:</label>
+    <label class="field-label">Subject</label>
     <select id="subject-select" onchange="renderSubjectView()">
       <option value="p1">Paper 1: Accounting (100 Marks)</option>
       <option value="p2">Paper 2: Business Laws (100 Marks)</option>
@@ -120,37 +136,41 @@
 
     <!-- RTP & MOCK INPUTS -->
     <div class="sub-section">
-      <div style="font-size:13px; font-weight:700; color:var(--primary); margin-bottom:8px;">Subject Practice Status:</div>
-      <label class="unit-item" style="border:none; padding:2px 0;">
+      <div style="font-size:12px; font-weight:700; color:var(--brand); text-transform:uppercase; margin-bottom:6px;">Exam Practice Status</div>
+      <label class="unit-item" style="border:none; padding:0; color:#1e293b; font-weight:500;">
         <input type="checkbox" id="rtp-checkbox" onchange="updateRtp(this.checked)">
-        <span><strong>ICAI Revision Test Paper (RTP) Completed</strong></span>
+        <span>ICAI Revision Test Paper (RTP) Completed</span>
       </label>
-      <label style="margin-top:8px;">Mock Tests Written for this paper:</label>
-      <input type="number" id="sub-mock-count" min="0" placeholder="e.g. 2" onchange="updateSubMock(this.value)">
+      <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
+        <span style="font-size:12px; color:#334155; font-weight:500; flex:1;">Mock Exams Written:</span>
+        <input type="number" id="sub-mock-count" min="0" placeholder="0" onchange="updateSubMock(this.value)" style="width:70px; padding:6px 8px; margin:0; text-align:center;">
+      </div>
     </div>
 
-    <label style="margin-top:16px;">Chapters & Live Progress:</label>
+    <label class="field-label">Chapters & Coverage</label>
     <div id="chapters-list"></div>
 
-    <button onclick="saveAndShowDashboard()">Save & View Progress Dashboard</button>
+    <button class="btn-primary" onclick="saveAndShowDashboard()">Save & View Dashboard</button>
   </div>
 
   <!-- SCREEN 2: PROGRESS DASHBOARD -->
   <div id="page-dashboard" class="card hidden">
     <h2>Revision Readiness</h2>
 
-    <div style="font-size:13px; font-weight:600; margin-top:8px;">
+    <div style="font-size:12.5px; font-weight:600; margin-top:8px;">
       Total Exam Readiness (70% Syllabus + 15% RTPs + 15% Mocks)
     </div>
     <div class="progress-track"><div id="overall-bar" class="progress-fill" style="background:var(--success);"></div></div>
     <div id="overall-label" style="font-size:13px; font-weight:700; text-align:right; margin-top:-10px;">0% Ready</div>
 
-    <h3 style="margin-top:20px;">Subject-Wise Completion</h3>
+    <h3 style="margin-top:16px;">Subject Completion</h3>
     <div id="subject-bars-container"></div>
 
-    <div id="strategy-reminder" style="font-size:12px; color:var(--muted); border-top:1px solid var(--border); padding-top:10px; margin-top:14px;"></div>
+    <div id="strategy-reminder" style="font-size:11.5px; color:var(--muted); border-top:1px solid var(--border); padding-top:10px; margin-top:12px; line-height:1.4;"></div>
 
-    <button onclick="showInputPage()" style="background:#475569;">+ Log More Units / Edit Inputs</button>
+    <button onclick="showInputPage()" style="background:#475569; color:#fff; border:none; border-radius:10px; padding:11px; width:100%; margin-top:14px; font-weight:600; font-size:14px; cursor:pointer;">
+      + Log More Chapters / Edit
+    </button>
   </div>
 
 </div>
@@ -166,18 +186,18 @@
           title: "Ch 1: Theoretical Framework",
           units: [
             "Unit 1: Meaning and Scope of Accounting",
-            "Unit 2: Accounting Concepts, Principles & Conventions",
-            "Unit 3: Capital and Revenue Expenditures and Receipts",
-            "Unit 4: Contingent Assets and Contingent Liabilities",
+            "Unit 2: Accounting Concepts & Principles",
+            "Unit 3: Capital & Revenue Expenditures/Receipts",
+            "Unit 4: Contingent Assets & Liabilities",
             "Unit 5: Accounting Policies",
-            "Unit 6: Accounting as Measurement Discipline (Valuation)",
+            "Unit 6: Measurement & Valuation Principles",
             "Unit 7: Accounting Standards"
           ]
         },
         {
           title: "Ch 2: Accounting Process",
           units: [
-            "Unit 1: Basic Accounting Procedures - Journal Entries",
+            "Unit 1: Journal Entries",
             "Unit 2: Ledgers",
             "Unit 3: Trial Balance",
             "Unit 4: Subsidiary Books",
@@ -186,26 +206,26 @@
           ]
         },
         {
-          title: "Ch 3: Bank Reconciliation Statement (BRS)",
-          units: ["Complete BRS Concepts & Practical Problems"]
+          title: "Ch 3: Bank Reconciliation Statement",
+          units: ["BRS Concepts, Causes of Differences & Problems"]
         },
         {
           title: "Ch 4: Inventories",
-          units: ["Valuation Methods, FIFO, Weighted Avg, Physical Stock Take"]
+          units: ["Cost Formulas, FIFO, Weighted Avg & Valuation"]
         },
         {
-          title: "Ch 5: Depreciation and Amortisation",
-          units: ["SLM, WDV, Change in Method, Machine Hour Rate"]
+          title: "Ch 5: Depreciation & Amortisation",
+          units: ["Methods of Depreciation, Changes & Computation"]
         },
         {
-          title: "Ch 6: Bills of Exchange and Promissory Notes",
-          units: ["Discounting, Endorsement, Dishonour, Accommodation Bills"]
+          title: "Ch 6: Bills of Exchange & Promissory Notes",
+          units: ["Dishonour, Renewal & Accommodation Bills"]
         },
         {
           title: "Ch 7: Final Accounts of Sole Proprietors",
           units: [
-            "Unit 1: Final Accounts of Non-Manufacturing Entities",
-            "Unit 2: Final Accounts of Manufacturing Entities"
+            "Unit 1: Non-Manufacturing Entities",
+            "Unit 2: Manufacturing Entities"
           ]
         },
         {
@@ -214,26 +234,26 @@
         },
         {
           title: "Ch 9: Accounts from Incomplete Records",
-          units: ["Single Entry Conversion & Statement of Affairs"]
+          units: ["Single Entry System & Statement of Affairs"]
         },
         {
           title: "Ch 10: Partnership and LLP Accounts",
           units: [
-            "Unit 1: Introduction to Partnership Accounts",
+            "Unit 1: Introduction to Partnership",
             "Unit 2: Treatment of Goodwill",
-            "Unit 3: Admission of a New Partner",
+            "Unit 3: Admission of a Partner",
             "Unit 4: Retirement of a Partner",
             "Unit 5: Death of a Partner",
-            "Unit 6: Dissolution of Partnership Firms and LLPs"
+            "Unit 6: Dissolution of Partnership Firms & LLPs"
           ]
         },
         {
           title: "Ch 11: Company Accounts",
           units: [
             "Unit 1: Introduction to Company Accounts",
-            "Unit 2: Issue, Forfeiture and Re-Issue of Shares",
+            "Unit 2: Issue, Forfeiture & Re-Issue of Shares",
             "Unit 3: Issue of Debentures",
-            "Unit 4: Bonus Issue and Right Issue",
+            "Unit 4: Bonus & Right Issues",
             "Unit 5: Redemption of Preference Shares",
             "Unit 6: Redemption of Debentures"
           ]
@@ -245,19 +265,19 @@
       chapters: [
         {
           title: "Ch 1: Indian Regulatory Framework",
-          units: ["Sources of Law, Legislative Bodies & Judiciary System"]
+          units: ["Sources of Law, Regulatory Bodies & Court Hierarchy"]
         },
         {
           title: "Ch 2: The Indian Contract Act, 1872",
           units: [
             "Unit 1: Nature of Contracts",
             "Unit 2: Consideration",
-            "Unit 3: Other Essential Elements of a Contract",
+            "Unit 3: Other Essential Elements",
             "Unit 4: Performance of Contract",
-            "Unit 5: Breach of Contract and Remedies",
-            "Unit 6: Contingent and Quasi Contracts",
-            "Unit 7: Contract of Indemnity and Guarantee",
-            "Unit 8: Bailment and Pledge",
+            "Unit 5: Breach of Contract & Remedies",
+            "Unit 6: Contingent & Quasi Contracts",
+            "Unit 7: Contract of Indemnity & Guarantee",
+            "Unit 8: Bailment & Pledge",
             "Unit 9: Agency"
           ]
         },
@@ -275,20 +295,20 @@
           units: [
             "Unit 1: General Nature of Partnership",
             "Unit 2: Relations of Partners",
-            "Unit 3: Registration and Dissolution"
+            "Unit 3: Registration & Dissolution"
           ]
         },
         {
-          title: "Ch 5: The Limited Liability Partnership Act, 2008",
-          units: ["Features, Incorporation, Differences with Partnership"]
+          title: "Ch 5: The Limited Liability Partnership Act",
+          units: ["Characteristics, Incorporation & Partner Relations"]
         },
         {
           title: "Ch 6: The Companies Act, 2013",
-          units: ["Company Characteristics, MOA, AOA, Incorporation Types"]
+          units: ["Company Types, MOA, AOA & Incorporation"]
         },
         {
-          title: "Ch 7: The Negotiable Instruments Act, 1881",
-          units: ["Promissory Notes, Bills, Cheques, Crossing, Dishonour"]
+          title: "Ch 7: The Negotiable Instruments Act",
+          units: ["Promissory Notes, Cheques, Negotiation & Dishonour"]
         }
       ]
     },
@@ -305,13 +325,13 @@
             "Ch 5: Permutations and Combinations",
             "Ch 6: Sequence and Series (AP & GP)",
             "Ch 7: Sets, Relations, Functions, Limits",
-            "Ch 8: Calculus - Differential & Integral"
+            "Ch 8: Differential & Integral Calculus"
           ]
         },
         {
           title: "Part B: Logical Reasoning",
           units: [
-            "Ch 9: Number Series, Coding-Decoding, Odd Man Out",
+            "Ch 9: Number Series, Coding-Decoding",
             "Ch 10: Direction Tests",
             "Ch 11: Seating Arrangements",
             "Ch 12: Blood Relations"
@@ -321,10 +341,10 @@
           title: "Part C: Statistics",
           units: [
             "Ch 13: Statistical Representation & Sampling",
-            "Ch 14: Central Tendency and Dispersion",
+            "Ch 14: Central Tendency & Dispersion",
             "Ch 15: Probability",
             "Ch 16: Theoretical Distributions",
-            "Ch 17: Correlation and Regression",
+            "Ch 17: Correlation & Regression",
             "Ch 18: Index Numbers"
           ]
         }
@@ -334,19 +354,19 @@
       name: "Paper 4: Business Economics",
       chapters: [
         {
-          title: "Ch 1: Nature and Scope of Business Economics",
-          units: ["Unit 1: Intro to Business Econ", "Unit 2: Basic Problems & Price Mechanism"]
+          title: "Ch 1: Nature & Scope of Economics",
+          units: ["Unit 1: Intro to Economics", "Unit 2: Basic Problems & Price Mechanism"]
         },
         {
           title: "Ch 2: Theory of Demand and Supply",
           units: ["Unit 1: Demand & Elasticity", "Unit 2: Consumer Behaviour", "Unit 3: Supply Analysis"]
         },
         {
-          title: "Ch 3: Theory of Production and Cost",
+          title: "Ch 3: Theory of Production & Cost",
           units: ["Unit 1: Theory of Production", "Unit 2: Theory of Cost"]
         },
         {
-          title: "Ch 4: Price Determination in Different Markets",
+          title: "Ch 4: Market Price Determination",
           units: ["Unit 1: Market Forms", "Unit 2: Price Determination", "Unit 3: Price-Output Analysis"]
         },
         {
@@ -393,7 +413,7 @@
 
   function initCountdownAndStrategy() {
     const daysLeft = calculateCountdown();
-    document.getElementById("countdown-badge").innerText = `⏳ ${daysLeft} days until Jan 3 Exam`;
+    document.getElementById("countdown-badge").innerText = `⏳ ${daysLeft} days to Jan 3`;
 
     const daysForSyllabus = Math.floor(daysLeft * 0.80);
     const daysPerSubject = Math.floor(daysForSyllabus / 4);
@@ -426,15 +446,12 @@
       let completedUnitsCount = 0;
 
       chap.units.forEach((_, uIdx) => {
-        if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) {
-          completedUnitsCount++;
-        }
+        if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) completedUnitsCount++;
       });
 
       const isAllDone = totalUnits > 0 && completedUnitsCount === totalUnits;
       const pct = Math.round((completedUnitsCount / totalUnits) * 100);
 
-      // Build units list
       let unitsHtml = "";
       chap.units.forEach((uTitle, uIdx) => {
         const uKey = `${sub}_c${cIdx}_u${uIdx}`;
@@ -454,15 +471,14 @@
               <span class="chapter-title">${chap.title}</span>
             </div>
             <button type="button" class="expand-btn" onclick="toggleUnitAccordion('units-${sub}-${cIdx}', this)">
-              <span>Units (${totalUnits})</span> ▾
+              <span>▾ ${totalUnits} ${totalUnits === 1 ? 'Unit' : 'Units'}</span>
             </button>
           </div>
 
-          <!-- In-Line Chapter Progress Bar -->
           <div class="chap-progress-wrapper">
             <div class="chap-meta">
-              <span id="chap-label-${sub}-${cIdx}">${completedUnitsCount} of ${totalUnits} units</span>
-              <span id="chap-pct-${sub}-${cIdx}"><strong>${pct}%</strong></span>
+              <span id="chap-label-${sub}-${cIdx}">${completedUnitsCount}/${totalUnits} completed</span>
+              <span id="chap-pct-${sub}-${cIdx}">${pct}%</span>
             </div>
             <div class="chap-progress-track">
               <div class="chap-progress-fill" id="chap-bar-${sub}-${cIdx}" style="width:${pct}%;"></div>
@@ -478,19 +494,19 @@
     });
   }
 
-  // Toggle unit accordion
   function toggleUnitAccordion(id, btn) {
     const el = document.getElementById(id);
     if (el.classList.contains("hidden")) {
       el.classList.remove("hidden");
       btn.innerHTML = btn.innerHTML.replace("▾", "▴");
+      btn.style.background = "#e2e8f0";
     } else {
       el.classList.add("hidden");
       btn.innerHTML = btn.innerHTML.replace("▴", "▾");
+      btn.style.background = "#f1f5f9";
     }
   }
 
-  // Check/uncheck entire chapter
   function toggleEntireChapter(sub, cIdx, isChecked) {
     const chap = SYLLABUS_TREE[sub].chapters[cIdx];
     chap.units.forEach((_, uIdx) => {
@@ -502,7 +518,6 @@
     refreshChapterProgress(sub, cIdx);
   }
 
-  // Check/uncheck single unit
   function toggleSingleUnit(sub, cIdx, uIdx, isChecked) {
     const uKey = `${sub}_c${cIdx}_u${uIdx}`;
     if (isChecked) appData.completedUnits[uKey] = true;
@@ -511,34 +526,28 @@
     refreshChapterProgress(sub, cIdx);
   }
 
-  // Live in-line bar update without losing state
   function refreshChapterProgress(sub, cIdx) {
     const chap = SYLLABUS_TREE[sub].chapters[cIdx];
     const totalUnits = chap.units.length;
     let completedCount = 0;
 
     chap.units.forEach((_, uIdx) => {
-      if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) {
-        completedCount++;
-      }
+      if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) completedCount++;
     });
 
     const isAllDone = totalUnits > 0 && completedCount === totalUnits;
     const pct = Math.round((completedCount / totalUnits) * 100);
 
-    // Update chapter checkbox
     const chapChk = document.getElementById(`chap-chk-${sub}-${cIdx}`);
     if (chapChk) chapChk.checked = isAllDone;
 
-    // Update in-line progress UI
     const bar = document.getElementById(`chap-bar-${sub}-${cIdx}`);
     const label = document.getElementById(`chap-label-${sub}-${cIdx}`);
     const pctLabel = document.getElementById(`chap-pct-${sub}-${cIdx}`);
     if (bar) bar.style.width = `${pct}%`;
-    if (label) label.innerText = `${completedCount} of ${totalUnits} units`;
-    if (pctLabel) pctLabel.innerHTML = `<strong>${pct}%</strong>`;
+    if (label) label.innerText = `${completedCount}/${totalUnits} completed`;
+    if (pctLabel) pctLabel.innerText = `${pct}%`;
 
-    // Sync unit checkboxes if needed
     const unitsContainer = document.getElementById(`units-${sub}-${cIdx}`);
     if (unitsContainer) {
       const checkboxes = unitsContainer.querySelectorAll('input[type="checkbox"]');
@@ -611,7 +620,7 @@
         <div style="margin-top:12px;">
           <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;">
             <span>${SYLLABUS_TREE[subKey].name}</span>
-            <span>${subPct}% (${subDone}/${subUnits} Units)</span>
+            <span>${subPct}% (${subDone}/${subUnits})</span>
           </div>
           <div class="progress-track"><div class="progress-fill" style="width:${subPct}%"></div></div>
           <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:-10px;">
@@ -635,11 +644,10 @@
     const revisionBuffer = daysLeft - daysForSyllabus;
 
     document.getElementById("strategy-reminder").innerHTML = `
-      <strong>Recommended Pacing (80/20 Rule):</strong> Aim to complete 1st syllabus pass within <strong>${daysPerSubject} days per paper</strong>, reserving the remaining <strong>${revisionBuffer} days</strong> exclusively for RTPs and timed 3-hour MTPs.
+      <strong>80/20 Pacing Plan:</strong> Spend roughly <strong>${daysPerSubject} days per paper</strong> on detailed study, reserving the final <strong>${revisionBuffer} days</strong> for comprehensive RTPs and timed MTPs.
     `;
   }
 
-  // Initial Load
   initCountdownAndStrategy();
   renderSubjectView();
 </script>
