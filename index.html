@@ -99,8 +99,30 @@
 
     /* BACKUP MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.6); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 16px; }
-    .modal-box { background: #fff; border-radius: 14px; max-width: 440px; width: 100%; padding: 16px; }
+    .modal-box { background: #fff; border-radius: 14px; max-width: 440px; width: 100%; padding: 16px; position: relative; }
     textarea { width: 100%; height: 90px; font-family: monospace; font-size: 11px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; resize: none; margin-top: 6px; }
+
+    .close-modal-btn {
+      width: 32px !important;
+      height: 32px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: #f1f5f9 !important;
+      color: #475569 !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 8px !important;
+      font-size: 14px !important;
+      font-weight: bold !important;
+      cursor: pointer !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+    }
+    .close-modal-btn:hover {
+      background: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
   </style>
 </head>
 <body>
@@ -110,7 +132,7 @@
   <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
     <div id="countdown-badge" class="badge">⏳ Calculating...</div>
     <div style="display:flex; gap:6px;">
-      <button onclick="togglePlanSettings()" style="width:auto; padding:4px 8px; font-size:11px; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-weight:600; cursor:pointer;">⚙️ Plan</button>
+      <button onclick="togglePlanSettings()" style="width:auto; padding:4px 8px; font-size:11px; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-weight:600; cursor:pointer;">⚙️️ Plan</button>
       <button onclick="openBackupModal()" style="width:auto; padding:4px 8px; font-size:11px; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-weight:600; cursor:pointer;">💾 Backup</button>
     </div>
   </div>
@@ -200,11 +222,11 @@
   </div>
 
   <!-- BACKUP & RESTORE MODAL -->
-  <div id="backup-modal" class="modal-overlay hidden">
-    <div class="modal-box">
+  <div id="backup-modal" class="modal-overlay hidden" onclick="handleOverlayClick(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3 style="margin:0;">💾 Backup & Restore Data</h3>
-        <button onclick="closeBackupModal()" style="width:auto; padding:2px 8px; border:none; background:#f1f5f9; border-radius:6px; font-weight:bold; cursor:pointer;">✕</button>
+        <button type="button" class="close-modal-btn" onclick="closeBackupModal()">✕</button>
       </div>
       <p style="font-size:11.5px; color:var(--muted); margin:6px 0 8px;">Never lose your progress. Copy your backup string or restore from a previous one:</p>
       
@@ -212,15 +234,15 @@
       <textarea id="backup-string" readonly onclick="this.select()"></textarea>
 
       <div style="display:flex; gap:6px; margin-top:8px;">
-        <button onclick="copyBackupToClipboard()" style="padding:8px; font-size:12px; background:var(--brand); color:#fff; font-weight:600; border-radius:6px;">📋 Copy Code</button>
-        <button onclick="downloadBackupFile()" style="padding:8px; font-size:12px; background:#0f172a; color:#fff; font-weight:600; border-radius:6px;">⬇️ Download File</button>
+        <button type="button" onclick="copyBackupToClipboard()" style="padding:8px; font-size:12px; background:var(--brand); color:#fff; font-weight:600; border-radius:6px; border:none; cursor:pointer;">📋 Copy Code</button>
+        <button type="button" onclick="downloadBackupFile()" style="padding:8px; font-size:12px; background:#0f172a; color:#fff; font-weight:600; border-radius:6px; border:none; cursor:pointer;">⬇️ Download File</button>
       </div>
 
       <hr style="border:0; border-top:1px solid var(--border); margin:12px 0;">
 
       <label class="field-label" style="margin-top:0;">Restore From Saved Code:</label>
       <input type="text" id="restore-input" placeholder="Paste backup text here..." style="font-size:12px; padding:8px;">
-      <button onclick="restoreFromCode()" style="margin-top:6px; padding:8px; font-size:12px; background:var(--success); color:#fff; font-weight:600; border-radius:6px; border:none;">🔄 Restore Progress</button>
+      <button type="button" onclick="restoreFromCode()" style="margin-top:6px; padding:8px; font-size:12px; background:var(--success); color:#fff; font-weight:600; border-radius:6px; border:none; cursor:pointer;">🔄 Restore Progress</button>
     </div>
   </div>
 
@@ -394,7 +416,7 @@
     omittedChapters: {},
     rtpDone: {},
     mocksDone: {},
-    subjectsPerDay: 2, // 1, 2, 3, or 4
+    subjectsPerDay: 2,
     bufferDays: null
   };
 
@@ -421,27 +443,20 @@
     const totalDays = calculateCountdown();
     document.getElementById("countdown-badge").innerText = `⏳ ${totalDays} days to Jan 3`;
 
-    // Default buffer is 20% of remaining days if not manually altered
     if (appData.bufferDays === null || appData.bufferDays === undefined) {
       appData.bufferDays = Math.max(5, Math.floor(totalDays * 0.20));
     }
     document.getElementById("buffer-days-input").value = appData.bufferDays;
 
-    // Highlight active subject mode tile
     for (let i = 1; i <= 4; i++) {
       const tile = document.getElementById(`sub-mode-${i}`);
       if (tile) tile.classList.toggle("active", (appData.subjectsPerDay || 2) === i);
     }
 
-    // Pacing calculations
     const studyDaysAvailable = Math.max(1, totalDays - appData.bufferDays);
     const mode = appData.subjectsPerDay || 2;
-    
-    // Total subject sessions = studyDaysAvailable * mode
-    // Sessions per subject (4 total subjects in Foundation)
     const sessionsPerSub = ((studyDaysAvailable * mode) / 4).toFixed(1);
 
-    // Count remaining non-omitted units and chapters
     let totalTargetUnits = 0;
     let doneUnits = 0;
     let totalTargetChapters = 0;
@@ -550,7 +565,6 @@
 
       const cardHtml = `
         <div class="chapter-card ${isOmitted ? 'omitted' : ''}" id="card-${sub}-${cIdx}">
-          <!-- Line 1: Checkbox, Title & Omit Button -->
           <div class="chap-line1">
             <div class="chap-title-group" onclick="handleTitleRowClick(event, '${sub}', ${cIdx})">
               <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} ${isOmitted ? "disabled" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
@@ -766,6 +780,18 @@
   function closeBackupModal() {
     document.getElementById("backup-modal").classList.add("hidden");
   }
+
+  function handleOverlayClick(e) {
+    if (e.target.id === "backup-modal") {
+      closeBackupModal();
+    }
+  }
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      closeBackupModal();
+    }
+  });
 
   function copyBackupToClipboard() {
     const str = document.getElementById("backup-string");
