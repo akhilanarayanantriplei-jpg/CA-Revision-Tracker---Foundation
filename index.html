@@ -3,13 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CA Foundation Revision Tracker</title>
+  <title>CA Foundation Revision Tracker & Planner</title>
 
-  <!-- WhatsApp & Social Media Preview Tags -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="CA Foundation Revision Tracker">
-  <meta property="og:description" content="Track your ICAI syllabus units, RTPs, and Mock Tests privately on your mobile.">
-  <meta property="og:url" content="https://akhilanayanantriplei-jpg.github.io/CA-Revision-Tracker---Foundation/">
+  <meta property="og:title" content="CA Foundation Revision Tracker & Planner">
+  <meta property="og:description" content="Dynamic pacing, daily unit targets, RTP/Mock tracking, and private offline backup.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&auto=format&fit=crop&q=80">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -21,6 +19,8 @@
       --brand-soft: #eff6ff;
       --brand-fill: #bfdbfe;
       --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
       --bg: #f8fafc;
       --card: #ffffff;
       --border: #e2e8f0;
@@ -28,153 +28,130 @@
       --muted: #64748b;
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 50px; }
     .container { max-width: 480px; margin: 0 auto; padding: 12px; }
     .card { background: var(--card); border-radius: 14px; padding: 14px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-bottom: 12px; }
     
     h2 { font-size: 17px; font-weight: 700; color: var(--primary); margin: 0 0 4px; }
     h3 { font-size: 14px; font-weight: 700; color: var(--primary); margin: 0 0 8px; }
     
-    label.field-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 14px; margin-bottom: 5px; }
+    label.field-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 12px; margin-bottom: 4px; }
 
-    /* HIGH VISIBILITY SUBJECT PICKER WRAPPER */
+    /* SUBJECT SELECTOR */
     .subject-picker-container {
-      background: #f8faff;
-      border: 2px solid var(--brand);
-      border-radius: 12px;
-      padding: 10px 12px;
-      margin-top: 10px;
-      box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.12);
-      position: relative;
+      background: #f8faff; border: 2px solid var(--brand); border-radius: 12px; padding: 10px 12px; margin-top: 8px; box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.12);
     }
-    .subject-picker-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--brand);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
+    .subject-picker-badge { font-size: 11px; font-weight: 800; color: var(--brand); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
     .subject-picker-select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid #bfdbfe;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--primary);
-      outline: none;
-      background: #ffffff;
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      background-size: 16px;
+      width: 100%; padding: 10px 12px; border: 1.5px solid #bfdbfe; border-radius: 8px; font-size: 15px; font-weight: 700; color: var(--primary); outline: none; background: #ffffff; cursor: pointer;
     }
-    .subject-picker-select:focus {
-      border-color: var(--brand);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+
+    /* TILES & BUTTONS */
+    .tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
+    .tile-btn {
+      padding: 9px 4px; text-align: center; border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; background: #fff; color: var(--text);
     }
-    
+    .tile-btn.active { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); }
+
     input[type="number"], button {
       width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; background: #fff;
     }
-    
-    button.btn-primary { background: var(--brand); color: white; border: none; font-weight: 600; cursor: pointer; margin-top: 14px; border-radius: 8px; padding: 12px; font-size: 14px; }
+    button.btn-primary { background: var(--brand); color: white; border: none; font-weight: 600; cursor: pointer; margin-top: 12px; border-radius: 8px; padding: 12px; font-size: 14px; }
     button.btn-primary:active { opacity: 0.9; }
 
-    /* Compact Chapter Card */
-    .chapter-card { border: 1px solid var(--border); border-radius: 10px; margin-top: 6px; background: #fff; overflow: hidden; }
-    .chap-line1 { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; cursor: pointer; }
-    .chap-line1 input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
+    /* CHAPTER CARD */
+    .chapter-card { border: 1px solid var(--border); border-radius: 10px; margin-top: 6px; background: #fff; overflow: hidden; transition: all 0.2s; }
+    .chapter-card.omitted { background: #f1f5f9; opacity: 0.65; border-style: dashed; }
+    .chap-line1 { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 8px 10px; }
+    .chap-title-group { display: flex; align-items: flex-start; gap: 8px; flex: 1; cursor: pointer; }
     .chapter-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .chapter-card.omitted .chapter-title { text-decoration: line-through; color: var(--muted); }
+    
+    .omit-btn {
+      background: none; border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; font-size: 10px; font-weight: 600; color: var(--muted); cursor: pointer; width: auto;
+    }
+    .omit-btn.is-omitted { background: #fee2e2; border-color: #fca5a5; color: var(--danger); }
 
-    /* Line 2 */
+    /* LINE 2 */
     .chap-line2 { display: flex; align-items: center; justify-content: space-between; padding: 0 10px 8px 35px; gap: 10px; }
     .expand-btn {
-      position: relative;
-      border: 1px solid #cbd5e1;
-      border-radius: 20px;
-      padding: 3px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #1e3a8a;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-      overflow: hidden;
-      background: #f1f5f9;
-      transition: background 0.3s ease;
+      position: relative; border: 1px solid #cbd5e1; border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 600; color: #1e3a8a; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; overflow: hidden; background: #f1f5f9; width: auto;
     }
-    .expand-btn:active { filter: brightness(0.95); }
     .chap-meta-text { font-size: 11px; color: var(--muted); font-weight: 500; }
 
-    /* Compact Units Drawer */
+    /* RECESSED UNITS */
     .units-list { border-top: 1px dashed var(--border); padding: 4px 10px 6px 34px; background: #f8fafc; }
     .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid #f1f5f9; font-size: 11.5px; line-height: 1.3; color: #475569; }
     .unit-item:last-child { border-bottom: none; }
-    .unit-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
+    input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
 
-    /* Progress & Dashboard */
+    /* PACING METRICS DASHBOARD */
+    .pace-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; margin-top: 10px; }
+    .pace-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+    .pace-stat-tile { background: #fff; padding: 8px; border-radius: 8px; border: 1px solid var(--border); text-align: center; }
+    .pace-stat-tile strong { font-size: 17px; color: var(--brand); display: block; }
+    .pace-stat-tile span { font-size: 10.5px; color: var(--muted); }
+
     .progress-track { background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; margin: 6px 0 12px; }
     .progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.4s ease; }
     .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1; }
     .hidden { display: none; }
 
-    .sub-section { background: var(--brand-soft); border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid #bfdbfe; }
-    .strategy-card { background: #fffbeb; border: 1px solid #fef08a; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-    .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
-    .strategy-box { background: #fff; border-radius: 6px; padding: 6px; border: 1px solid #fef9c3; text-align: center; }
-    .strategy-box strong { display: block; font-size: 15px; color: #854d0e; }
-    .strategy-box span { font-size: 10.5px; color: #a16207; }
+    /* BACKUP MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.6); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 16px; }
+    .modal-box { background: #fff; border-radius: 14px; max-width: 440px; width: 100%; padding: 16px; }
+    textarea { width: 100%; height: 90px; font-family: monospace; font-size: 11px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; resize: none; margin-top: 6px; }
   </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- FIRST TIME ONBOARDING STRATEGY -->
-  <div id="first-time-strategy" class="strategy-card hidden">
-    <h3 style="color:#854d0e; margin:0 0 2px;">🎯 Exam Pacing Split</h3>
-    <p style="font-size:11.5px; color:#713f12; margin:0 0 6px; line-height:1.35;">
-      Exam starts <strong>Jan 3, 2027</strong>. Recommended distribution:
-    </p>
+  <!-- TOP BAR: COUNTDOWN & BACKUP -->
+  <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+    <div id="countdown-badge" class="badge">⏳ Calculating...</div>
+    <div style="display:flex; gap:6px;">
+      <button onclick="togglePlanSettings()" style="width:auto; padding:4px 8px; font-size:11px; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-weight:600; cursor:pointer;">⚙️ Plan</button>
+      <button onclick="openBackupModal()" style="width:auto; padding:4px 8px; font-size:11px; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-weight:600; cursor:pointer;">💾 Backup</button>
+    </div>
+  </div>
 
-    <div class="strategy-grid">
-      <div class="strategy-box">
-        <strong id="split-per-sub">0 Days</strong>
-        <span>per Paper (80% Total)</span>
-      </div>
-      <div class="strategy-box">
-        <strong id="split-rev">0 Days</strong>
-        <span>Final Revision Buffer (20%)</span>
+  <!-- STUDY PACING CONFIGURATION (DRAWER) -->
+  <div id="plan-settings-card" class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="margin:0;">🎯 Study Schedule & Target Pacing</h3>
+      <span style="font-size:11px; color:var(--muted);">Jan 3, 2027 Exam</span>
+    </div>
+    
+    <label class="field-label">How many subjects do you study in a day?</label>
+    <div class="tile-grid">
+      <div class="tile-btn" id="sub-mode-1" onclick="setSubjectsPerDay(1)">1 Sub<br><small>Full Day</small></div>
+      <div class="tile-btn" id="sub-mode-2" onclick="setSubjectsPerDay(2)">2 Subs<br><small>Half Day</small></div>
+      <div class="tile-btn" id="sub-mode-3" onclick="setSubjectsPerDay(3)">3 Subs<br><small>1/3 Day</small></div>
+      <div class="tile-btn" id="sub-mode-4" onclick="setSubjectsPerDay(4)">4 Subs<br><small>Quarter</small></div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:10px;">
+      <div style="flex:1;">
+        <label class="field-label" style="margin-top:0;">Final Revision Buffer</label>
+        <div style="display:flex; align-items:center; gap:4px;">
+          <input type="number" id="buffer-days-input" min="0" onchange="updateBufferDays(this.value)" style="padding:6px 8px; font-size:13px;">
+          <span style="font-size:12px; color:var(--muted); white-space:nowrap;">Days for RTP/Mocks</span>
+        </div>
       </div>
     </div>
 
-    <button onclick="dismissFirstTimeModal()" style="background:#d97706; color:#fff; border:none; padding:7px; font-size:12px; font-weight:600; border-radius:6px; margin-top:8px; width:100%; cursor:pointer;">
-      Got It, Continue
-    </button>
-  </div>
-
-  <!-- COUNTDOWN HEADER -->
-  <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; padding: 0 2px;">
-    <div id="countdown-badge" class="badge">⏳ Calculating days...</div>
-    <span style="font-size:11px; color:var(--muted); font-weight:500;">Jan 3, 5, 7, 9 Schedule</span>
+    <!-- PACING TARGET REPORT -->
+    <div class="pace-box" id="pacing-report-box"></div>
   </div>
 
   <!-- SCREEN 1: INPUT AND LOGGING -->
   <div id="page-input" class="card">
     <h2>Daily Revision Tracker</h2>
-    <p style="font-size: 12px; color: var(--muted); margin: 0 0 6px;">Check entire chapter or tap units. Saved on your device.</p>
+    <p style="font-size: 12px; color: var(--muted); margin: 0 0 6px;">Tick covered chapters/units. Click "Omit" if dropping a chapter.</p>
 
-    <!-- EYE-CATCHING SUBJECT SELECTOR CARD -->
+    <!-- HIGH-VISIBILITY SUBJECT PICKER -->
     <div class="subject-picker-container">
-      <div class="subject-picker-badge">📚 Choose Subject to Update</div>
+      <div class="subject-picker-badge">📚 Active Subject to Track</div>
       <select id="subject-select" class="subject-picker-select" onchange="renderSubjectView()">
         <option value="p1">Paper 1: Accounting (100 Marks)</option>
         <option value="p2">Paper 2: Business Laws (100 Marks)</option>
@@ -184,8 +161,8 @@
     </div>
 
     <!-- PRACTICE METRICS -->
-    <div class="sub-section">
-      <div style="font-size:11px; font-weight:700; color:var(--brand); text-transform:uppercase; margin-bottom:4px;">Practice Metrics</div>
+    <div style="background:var(--brand-soft); border:1px solid #bfdbfe; border-radius:8px; padding:10px; margin-top:10px;">
+      <div style="font-size:11px; font-weight:700; color:var(--brand); text-transform:uppercase; margin-bottom:4px;">Practice Status</div>
       <label class="unit-item" style="border:none; padding:0; color:#1e293b; font-weight:500;">
         <input type="checkbox" id="rtp-checkbox" onchange="updateRtp(this.checked)">
         <span>ICAI Revision Test Paper (RTP) Completed</span>
@@ -196,23 +173,23 @@
       </div>
     </div>
 
-    <label class="field-label">Chapters & Coverage</label>
+    <label class="field-label">Chapters & Units</label>
     <div id="chapters-list"></div>
 
-    <button class="btn-primary" onclick="saveAndShowDashboard()">Save & View Dashboard</button>
+    <button class="btn-primary" onclick="saveAndShowDashboard()">Save & View Readiness Dashboard</button>
   </div>
 
-  <!-- SCREEN 2: PROGRESS DASHBOARD -->
+  <!-- SCREEN 2: READINESS DASHBOARD -->
   <div id="page-dashboard" class="card hidden">
     <h2>Revision Readiness</h2>
 
     <div style="font-size:12px; font-weight:600; margin-top:6px;">
-      Total Exam Readiness (70% Syllabus + 15% RTPs + 15% Mocks)
+      Total Exam Readiness (70% Target Syllabus + 15% RTPs + 15% Mocks)
     </div>
     <div class="progress-track"><div id="overall-bar" class="progress-fill" style="background:var(--success);"></div></div>
     <div id="overall-label" style="font-size:12px; font-weight:700; text-align:right; margin-top:-8px;">0% Ready</div>
 
-    <h3 style="margin-top:14px;">Subject Completion</h3>
+    <h3 style="margin-top:14px;">Subject Breakdown</h3>
     <div id="subject-bars-container"></div>
 
     <div id="strategy-reminder" style="font-size:11px; color:var(--muted); border-top:1px solid var(--border); padding-top:8px; margin-top:10px; line-height:1.35;"></div>
@@ -220,6 +197,31 @@
     <button onclick="showInputPage()" style="background:#475569; color:#fff; border:none; border-radius:8px; padding:10px; width:100%; margin-top:12px; font-weight:600; font-size:13px; cursor:pointer;">
       + Log More Chapters / Edit
     </button>
+  </div>
+
+  <!-- BACKUP & RESTORE MODAL -->
+  <div id="backup-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;">💾 Backup & Restore Data</h3>
+        <button onclick="closeBackupModal()" style="width:auto; padding:2px 8px; border:none; background:#f1f5f9; border-radius:6px; font-weight:bold; cursor:pointer;">✕</button>
+      </div>
+      <p style="font-size:11.5px; color:var(--muted); margin:6px 0 8px;">Never lose your progress. Copy your backup string or restore from a previous one:</p>
+      
+      <label class="field-label" style="margin-top:4px;">Your Backup Code (Save in WhatsApp/Notes):</label>
+      <textarea id="backup-string" readonly onclick="this.select()"></textarea>
+
+      <div style="display:flex; gap:6px; margin-top:8px;">
+        <button onclick="copyBackupToClipboard()" style="padding:8px; font-size:12px; background:var(--brand); color:#fff; font-weight:600; border-radius:6px;">📋 Copy Code</button>
+        <button onclick="downloadBackupFile()" style="padding:8px; font-size:12px; background:#0f172a; color:#fff; font-weight:600; border-radius:6px;">⬇️ Download File</button>
+      </div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:12px 0;">
+
+      <label class="field-label" style="margin-top:0;">Restore From Saved Code:</label>
+      <input type="text" id="restore-input" placeholder="Paste backup text here..." style="font-size:12px; padding:8px;">
+      <button onclick="restoreFromCode()" style="margin-top:6px; padding:8px; font-size:12px; background:var(--success); color:#fff; font-weight:600; border-radius:6px; border:none;">🔄 Restore Progress</button>
+    </div>
   </div>
 
 </div>
@@ -386,11 +388,14 @@
     }
   };
 
+  // APP STATE
   let appData = JSON.parse(localStorage.getItem("ca_found_revision_state")) || {
     completedUnits: {},
+    omittedChapters: {},
     rtpDone: {},
     mocksDone: {},
-    hasSeenStrategy: false
+    subjectsPerDay: 2, // 1, 2, 3, or 4
+    bufferDays: null
   };
 
   function calculateCountdown() {
@@ -400,26 +405,107 @@
     return diffDays > 0 ? diffDays : 0;
   }
 
-  function initCountdownAndStrategy() {
-    const daysLeft = calculateCountdown();
-    document.getElementById("countdown-badge").innerText = `⏳ ${daysLeft} days to Jan 3`;
-
-    const daysForSyllabus = Math.floor(daysLeft * 0.80);
-    const daysPerSubject = Math.floor(daysForSyllabus / 4);
-    const revisionBuffer = daysLeft - daysForSyllabus;
-
-    document.getElementById("split-per-sub").innerText = `${daysPerSubject} Days`;
-    document.getElementById("split-rev").innerText = `${revisionBuffer} Days`;
-
-    if (!appData.hasSeenStrategy) {
-      document.getElementById("first-time-strategy").classList.remove("hidden");
-    }
+  function setSubjectsPerDay(num) {
+    appData.subjectsPerDay = num;
+    saveToStorage();
+    updatePlanUI();
   }
 
-  function dismissFirstTimeModal() {
-    appData.hasSeenStrategy = true;
+  function updateBufferDays(val) {
+    appData.bufferDays = Math.max(0, parseInt(val) || 0);
     saveToStorage();
-    document.getElementById("first-time-strategy").classList.add("hidden");
+    updatePlanUI();
+  }
+
+  function updatePlanUI() {
+    const totalDays = calculateCountdown();
+    document.getElementById("countdown-badge").innerText = `⏳ ${totalDays} days to Jan 3`;
+
+    // Default buffer is 20% of remaining days if not manually altered
+    if (appData.bufferDays === null || appData.bufferDays === undefined) {
+      appData.bufferDays = Math.max(5, Math.floor(totalDays * 0.20));
+    }
+    document.getElementById("buffer-days-input").value = appData.bufferDays;
+
+    // Highlight active subject mode tile
+    for (let i = 1; i <= 4; i++) {
+      const tile = document.getElementById(`sub-mode-${i}`);
+      if (tile) tile.classList.toggle("active", (appData.subjectsPerDay || 2) === i);
+    }
+
+    // Pacing calculations
+    const studyDaysAvailable = Math.max(1, totalDays - appData.bufferDays);
+    const mode = appData.subjectsPerDay || 2;
+    
+    // Total subject sessions = studyDaysAvailable * mode
+    // Sessions per subject (4 total subjects in Foundation)
+    const sessionsPerSub = ((studyDaysAvailable * mode) / 4).toFixed(1);
+
+    // Count remaining non-omitted units and chapters
+    let totalTargetUnits = 0;
+    let doneUnits = 0;
+    let totalTargetChapters = 0;
+    let doneChapters = 0;
+
+    Object.keys(SYLLABUS_TREE).forEach(subKey => {
+      SYLLABUS_TREE[subKey].chapters.forEach((chap, cIdx) => {
+        const chapKey = `${subKey}_c${cIdx}`;
+        if (!appData.omittedChapters[chapKey]) {
+          totalTargetChapters++;
+          let chapAllDone = true;
+          chap.units.forEach((_, uIdx) => {
+            totalTargetUnits++;
+            if (appData.completedUnits[`${subKey}_c${cIdx}_u${uIdx}`]) {
+              doneUnits++;
+            } else {
+              chapAllDone = false;
+            }
+          });
+          if (chapAllDone) doneChapters++;
+        }
+      });
+    });
+
+    const unitsRemaining = Math.max(0, totalTargetUnits - doneUnits);
+    const chapsRemaining = Math.max(0, totalTargetChapters - doneChapters);
+
+    const unitsPerDay = (unitsRemaining / studyDaysAvailable).toFixed(1);
+    const chapsPerDay = (chapsRemaining / studyDaysAvailable).toFixed(2);
+
+    let slotName = "Half-Days";
+    if (mode === 1) slotName = "Full Days";
+    if (mode === 3) slotName = "1/3rd Days";
+    if (mode === 4) slotName = "Quarter Days";
+
+    document.getElementById("pacing-report-box").innerHTML = `
+      <div style="font-size:11.5px; font-weight:700; color:var(--primary); margin-bottom:4px;">⏱️ Your Calculated Revision Pace</div>
+      <div class="pace-stat-grid">
+        <div class="pace-stat-tile">
+          <strong>${unitsPerDay}</strong>
+          <span>Units / Day Needed</span>
+        </div>
+        <div class="pace-stat-tile">
+          <strong>${chapsPerDay}</strong>
+          <span>Chapters / Day Needed</span>
+        </div>
+        <div class="pace-stat-tile">
+          <strong>${studyDaysAvailable} Days</strong>
+          <span>First-Pass Study Window</span>
+        </div>
+        <div class="pace-stat-tile">
+          <strong>${sessionsPerSub} ${slotName}</strong>
+          <span>In Hand per Paper</span>
+        </div>
+      </div>
+      <div style="font-size:10.5px; color:var(--muted); margin-top:8px; line-height:1.35;">
+        *Calculated across <strong>${totalTargetChapters} active chapters</strong> (${unitsRemaining} units pending). Excludes ${Object.keys(appData.omittedChapters).length} omitted chapters and ${appData.bufferDays} revision buffer days.
+      </div>
+    `;
+  }
+
+  function togglePlanSettings() {
+    const card = document.getElementById("plan-settings-card");
+    card.classList.toggle("hidden");
   }
 
   function getButtonProgressGradient(pct) {
@@ -436,6 +522,8 @@
     container.innerHTML = "";
 
     SYLLABUS_TREE[sub].chapters.forEach((chap, cIdx) => {
+      const chapKey = `${sub}_c${cIdx}`;
+      const isOmitted = !!appData.omittedChapters[chapKey];
       const totalUnits = chap.units.length;
       let completedUnitsCount = 0;
 
@@ -453,21 +541,27 @@
         const isUnitDone = appData.completedUnits[uKey] ? "checked" : "";
         unitsHtml += `
           <label class="unit-item">
-            <input type="checkbox" ${isUnitDone} onchange="toggleSingleUnit('${sub}', ${cIdx}, ${uIdx}, this.checked)">
-            <span>${uTitle}</span>
+            <input type="checkbox" ${isUnitDone} ${isOmitted ? 'disabled' : ''} onchange="toggleSingleUnit('${sub}', ${cIdx}, ${uIdx}, this.checked)">
+            <span style="${isOmitted ? 'text-decoration:line-through; color:#94a3b8;' : ''}">${uTitle}</span>
           </label>`;
       });
 
       const hasMultipleUnits = totalUnits > 1;
 
       const cardHtml = `
-        <div class="chapter-card" id="card-${sub}-${cIdx}">
-          <div class="chap-line1" onclick="handleTitleRowClick(event, '${sub}', ${cIdx})">
-            <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
-            <span class="chapter-title">${chap.title}</span>
+        <div class="chapter-card ${isOmitted ? 'omitted' : ''}" id="card-${sub}-${cIdx}">
+          <!-- Line 1: Checkbox, Title & Omit Button -->
+          <div class="chap-line1">
+            <div class="chap-title-group" onclick="handleTitleRowClick(event, '${sub}', ${cIdx})">
+              <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} ${isOmitted ? "disabled" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
+              <span class="chapter-title">${chap.title}</span>
+            </div>
+            <button type="button" class="omit-btn ${isOmitted ? 'is-omitted' : ''}" onclick="toggleOmitChapter('${sub}', ${cIdx})">
+              ${isOmitted ? 'Omitted ✕' : 'Omit'}
+            </button>
           </div>
 
-          ${hasMultipleUnits ? `
+          ${hasMultipleUnits && !isOmitted ? `
           <div class="chap-line2">
             <button type="button" class="expand-btn" id="btn-${sub}-${cIdx}" 
               style="background: ${bgGradient};"
@@ -485,13 +579,24 @@
       `;
       container.innerHTML += cardHtml;
     });
+
+    updatePlanUI();
   }
 
   function handleTitleRowClick(e, sub, cIdx) {
-    if (e.target.tagName.toLowerCase() === 'input') return;
+    if (appData.omittedChapters[`${sub}_c${cIdx}`]) return;
+    if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'button') return;
     const chk = document.getElementById(`chap-chk-${sub}-${cIdx}`);
     chk.checked = !chk.checked;
     toggleEntireChapter(sub, cIdx, chk.checked);
+  }
+
+  function toggleOmitChapter(sub, cIdx) {
+    const key = `${sub}_c${cIdx}`;
+    if (appData.omittedChapters[key]) delete appData.omittedChapters[key];
+    else appData.omittedChapters[key] = true;
+    saveToStorage();
+    renderSubjectView();
   }
 
   function toggleUnitAccordion(id, btn) {
@@ -518,6 +623,7 @@
     });
     saveToStorage();
     refreshChapterProgress(sub, cIdx);
+    updatePlanUI();
   }
 
   function toggleSingleUnit(sub, cIdx, uIdx, isChecked) {
@@ -526,6 +632,7 @@
     else delete appData.completedUnits[uKey];
     saveToStorage();
     refreshChapterProgress(sub, cIdx);
+    updatePlanUI();
   }
 
   function refreshChapterProgress(sub, cIdx) {
@@ -534,9 +641,7 @@
     let completedCount = 0;
 
     chap.units.forEach((_, uIdx) => {
-      if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) {
-        completedCount++;
-      }
+      if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) completedCount++;
     });
 
     const isAllDone = totalUnits > 0 && completedCount === totalUnits;
@@ -579,6 +684,7 @@
   function saveAndShowDashboard() {
     saveToStorage();
     document.getElementById("page-input").classList.add("hidden");
+    document.getElementById("plan-settings-card").classList.add("hidden");
     document.getElementById("page-dashboard").classList.remove("hidden");
     buildDashboard();
   }
@@ -586,6 +692,7 @@
   function showInputPage() {
     document.getElementById("page-dashboard").classList.add("hidden");
     document.getElementById("page-input").classList.remove("hidden");
+    document.getElementById("plan-settings-card").classList.remove("hidden");
     renderSubjectView();
   }
 
@@ -603,10 +710,13 @@
       let subDone = 0;
 
       SYLLABUS_TREE[subKey].chapters.forEach((chap, cIdx) => {
-        chap.units.forEach((_, uIdx) => {
-          subUnits++;
-          if (appData.completedUnits[`${subKey}_c${cIdx}_u${uIdx}`]) subDone++;
-        });
+        const isOmitted = !!appData.omittedChapters[`${subKey}_c${cIdx}`];
+        if (!isOmitted) {
+          chap.units.forEach((_, uIdx) => {
+            subUnits++;
+            if (appData.completedUnits[`${subKey}_c${cIdx}_u${uIdx}`]) subDone++;
+          });
+        }
       });
 
       grandTotalUnits += subUnits;
@@ -615,7 +725,7 @@
       if (appData.rtpDone[subKey]) totalRtpCompleted++;
       totalMocksAttempted += (appData.mocksDone[subKey] || 0);
 
-      const subPct = Math.round((subDone / subUnits) * 100);
+      const subPct = subUnits > 0 ? Math.round((subDone / subUnits) * 100) : 100;
       const isRtp = appData.rtpDone[subKey] ? "✅ RTP Done" : "⏳ RTP Pending";
       const mocks = appData.mocksDone[subKey] || 0;
 
@@ -633,7 +743,7 @@
         </div>`;
     });
 
-    const unitScore = (grandDoneUnits / grandTotalUnits) * 70;
+    const unitScore = grandTotalUnits > 0 ? (grandDoneUnits / grandTotalUnits) * 70 : 70;
     const rtpScore = (totalRtpCompleted / 4) * 15;
     const mockScore = Math.min(15, (totalMocksAttempted / 8) * 15);
     const overallScore = Math.round(unitScore + rtpScore + mockScore);
@@ -641,17 +751,59 @@
     document.getElementById("overall-bar").style.width = `${overallScore}%`;
     document.getElementById("overall-label").innerText = `${overallScore}% Readiness Score`;
 
-    const daysLeft = calculateCountdown();
-    const daysForSyllabus = Math.floor(daysLeft * 0.80);
-    const daysPerSubject = Math.floor(daysForSyllabus / 4);
-    const revisionBuffer = daysLeft - daysForSyllabus;
-
     document.getElementById("strategy-reminder").innerHTML = `
-      <strong>80/20 Pacing Plan:</strong> Spend roughly <strong>${daysPerSubject} days per paper</strong> on detailed study, reserving the final <strong>${revisionBuffer} days</strong> for comprehensive RTPs and timed MTPs.
+      <strong>Dynamic Pacing Active:</strong> Your plan reserves <strong>${appData.bufferDays} days</strong> exclusively for RTPs & Mock Exams. Ensure all remaining active units are completed before this buffer begins.
     `;
   }
 
-  initCountdownAndStrategy();
+  // BACKUP & RESTORE LOGIC
+  function openBackupModal() {
+    const backupJson = JSON.stringify(appData);
+    document.getElementById("backup-string").value = backupJson;
+    document.getElementById("backup-modal").classList.remove("hidden");
+  }
+
+  function closeBackupModal() {
+    document.getElementById("backup-modal").classList.add("hidden");
+  }
+
+  function copyBackupToClipboard() {
+    const str = document.getElementById("backup-string");
+    str.select();
+    navigator.clipboard.writeText(str.value).then(() => {
+      alert("Backup code copied! Save it in your WhatsApp chat or personal notes.");
+    });
+  }
+
+  function downloadBackupFile() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", `CA_Foundation_Tracker_Backup_${new Date().toISOString().slice(0,10)}.json`);
+    dlAnchor.click();
+  }
+
+  function restoreFromCode() {
+    const raw = document.getElementById("restore-input").value.trim();
+    if (!raw) return alert("Please paste a valid backup string first.");
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed.completedUnits || parsed.omittedChapters) {
+        appData = parsed;
+        saveToStorage();
+        closeBackupModal();
+        renderSubjectView();
+        alert("Progress restored successfully!");
+      } else {
+        alert("Invalid backup format.");
+      }
+    } catch (e) {
+      alert("Error parsing backup code. Please verify the copied text.");
+    }
+  }
+
+  // BOOT
+  updatePlanUI();
   renderSubjectView();
 </script>
 </body>
