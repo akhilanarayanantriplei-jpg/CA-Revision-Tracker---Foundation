@@ -3,272 +3,404 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CA Foundation Revision Tracker & Planner</title>
+  <title>CA Foundation Revision Navigator</title>
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="CA Foundation Revision Tracker & Planner">
-  <meta property="og:description" content="Dynamic pacing, daily unit targets, RTP/Mock tracking, and private offline backup.">
+  <meta property="og:title" content="CA Foundation Revision Tracker & Pacing Navigator">
+  <meta property="og:description" content="Dynamic velocity calculator, daily chapter quotas, unit checklists & calibrated risk indicators.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&auto=format&fit=crop&q=80">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
 
   <style>
     :root {
-      --primary: #0f172a;
-      --brand: #2563eb;
-      --brand-soft: #eff6ff;
-      --brand-fill: #bfdbfe;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+
+      --brand: #4f46e5;
+      --brand-soft: #eef2ff;
       --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --border: #e2e8f0;
-      --text: #1e293b;
-      --muted: #64748b;
+      --rose: #ef4444;
+      --amber: #f59e0b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
     }
+
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 50px; }
-    .container { max-width: 480px; margin: 0 auto; padding: 12px; }
-    .card { background: var(--card); border-radius: 14px; padding: 14px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-bottom: 12px; }
-    
-    h2 { font-size: 17px; font-weight: 700; color: var(--primary); margin: 0 0 4px; }
-    h3 { font-size: 14px; font-weight: 700; color: var(--primary); margin: 0 0 8px; }
-    
-    label.field-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 12px; margin-bottom: 4px; }
+    body {
+      margin: 0; padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f1f5f9;
+      color: var(--slate-800);
+      line-height: 1.5;
+      padding-bottom: 50px;
+    }
+
+    .container { max-width: 500px; margin: 0 auto; padding: 14px; }
+
+    /* HEADER */
+    .app-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--slate-200);
+    }
+    .brand-title { font-size: 17px; font-weight: 800; color: var(--slate-900); }
+    .brand-subtitle { font-size: 11px; font-weight: 600; color: var(--slate-500); }
+    .top-actions { display: flex; gap: 6px; }
+    .action-btn {
+      appearance: none; border: 1px solid var(--slate-200); background: #fff;
+      color: var(--slate-700); font-size: 11.5px; font-weight: 700; padding: 6px 10px;
+      border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.15s;
+    }
+    .action-btn:active { background: var(--slate-100); transform: scale(0.98); }
+
+    /* HERO READINESS CARD */
+    .hero-card {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      color: #fff; border-radius: var(--radius-lg); padding: 16px; margin-bottom: 14px;
+      box-shadow: 0 10px 20px -5px rgba(49, 46, 129, 0.25); position: relative; overflow: hidden;
+    }
+    .hero-card::after {
+      content: ''; position: absolute; right: -20px; top: -20px; width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); border-radius: 50%;
+    }
+    .hero-top { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+    .hero-pct { font-size: 28px; font-weight: 900; letter-spacing: -0.02em; color: #38bdf8; }
+    .progress-bar-wrap { background: rgba(255,255,255,0.15); border-radius: 999px; height: 10px; overflow: hidden; margin-bottom: 12px; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .hero-stat-pill {
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-sm); padding: 6px; text-align: center; cursor: pointer;
+    }
+    .hero-stat-pill strong { display: block; font-size: 15px; font-weight: 800; color: #fff; }
+    .hero-stat-pill span { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.04em; color: #c7d2fe; font-weight: 600; }
 
     /* SUBJECT SELECTOR */
-    .subject-picker-container {
-      background: #f8faff; border: 2px solid var(--brand); border-radius: 12px; padding: 10px 12px; margin-top: 8px; box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.12);
+    .subject-selector-card {
+      background: #ffffff; border-radius: var(--radius-md); padding: 12px;
+      margin-bottom: 12px; border: 2px solid var(--brand); box-shadow: 0 4px 10px -2px rgba(79, 70, 229, 0.1);
     }
-    .subject-picker-badge { font-size: 11px; font-weight: 800; color: var(--brand); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .subject-picker-select {
-      width: 100%; padding: 10px 12px; border: 1.5px solid #bfdbfe; border-radius: 8px; font-size: 15px; font-weight: 700; color: var(--primary); outline: none; background: #ffffff; cursor: pointer;
+    .subject-dropdown {
+      width: 100%; background: var(--slate-50); border: 1.5px solid #c7d2fe;
+      color: var(--slate-900); font-size: 14.5px; font-weight: 800; padding: 10px;
+      border-radius: var(--radius-sm); outline: none; cursor: pointer;
     }
 
-    /* TILES & BUTTONS */
-    .tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
-    .tile-btn {
-      padding: 9px 4px; text-align: center; border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; background: #fff; color: var(--text);
+    /* PRACTICE SECTION */
+    .practice-card {
+      background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-md);
+      padding: 12px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px;
     }
-    .tile-btn.active { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); }
+    .practice-row { display: flex; justify-content: space-between; align-items: center; }
+    input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--brand); cursor: pointer; }
+    .number-box { width: 65px; padding: 6px; border: 1.5px solid var(--slate-300); border-radius: 6px; text-align: center; font-size: 14px; font-weight: 800; outline: none; }
 
-    input[type="number"], button {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; background: #fff;
+    /* SECTION PART DIVIDER */
+    .section-part-divider {
+      background: #e0e7ff; color: #3730a3; font-size: 11.5px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 12px;
+      border-radius: var(--radius-sm); margin: 14px 0 6px;
     }
-    button.btn-primary { background: var(--brand); color: white; border: none; font-weight: 600; cursor: pointer; margin-top: 12px; border-radius: 8px; padding: 12px; font-size: 14px; }
-    button.btn-primary:active { opacity: 0.9; }
 
     /* CHAPTER CARD */
-    .chapter-card { border: 1px solid var(--border); border-radius: 10px; margin-top: 6px; background: #fff; overflow: hidden; transition: all 0.2s; }
-    .chapter-card.omitted { background: #f1f5f9; opacity: 0.65; border-style: dashed; }
-    .chap-line1 { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 8px 10px; }
-    .chap-title-group { display: flex; align-items: flex-start; gap: 8px; flex: 1; cursor: pointer; }
-    .chapter-title { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
-    .chapter-card.omitted .chapter-title { text-decoration: line-through; color: var(--muted); }
+    .chapter-card {
+      background: #ffffff; border: 1px solid var(--slate-200); border-radius: var(--radius-md);
+      margin-bottom: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: all 0.15s;
+    }
+    .chapter-card.omitted { background: #f8fafc; border-style: dashed; opacity: 0.65; }
+    .chap-line1 { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 10px 12px; }
+    .chap-clickable-title { display: flex; align-items: flex-start; gap: 10px; flex: 1; cursor: pointer; }
+    .chap-title-text { font-size: 13px; font-weight: 700; color: var(--slate-900); line-height: 1.35; }
+    .chapter-card.omitted .chap-title-text { text-decoration: line-through; color: var(--slate-400); }
     
     .omit-btn {
-      background: none; border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; font-size: 10px; font-weight: 600; color: var(--muted); cursor: pointer; width: auto;
+      border: 1px solid var(--slate-200); background: var(--slate-50); color: var(--slate-500);
+      font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px; cursor: pointer; width: auto;
     }
-    .omit-btn.is-omitted { background: #fee2e2; border-color: #fca5a5; color: var(--danger); }
+    .omit-btn.active { background: #ffe4e6; color: var(--rose); border-color: #fecdd3; }
 
-    /* LINE 2 */
-    .chap-line2 { display: flex; align-items: center; justify-content: space-between; padding: 0 10px 8px 35px; gap: 10px; }
+    .chap-line2 { display: flex; align-items: center; justify-content: space-between; padding: 0 12px 10px 38px; }
     .expand-btn {
-      position: relative; border: 1px solid #cbd5e1; border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 600; color: #1e3a8a; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; overflow: hidden; background: #f1f5f9; width: auto;
+      border: 1px solid #cbd5e1; border-radius: 20px; padding: 3px 10px; font-size: 11px;
+      font-weight: 700; color: var(--brand); cursor: pointer; display: inline-flex; align-items: center; gap: 4px; background: #f1f5f9; width: auto;
     }
-    .chap-meta-text { font-size: 11px; color: var(--muted); font-weight: 500; }
 
     /* RECESSED UNITS */
-    .units-list { border-top: 1px dashed var(--border); padding: 4px 10px 6px 34px; background: #f8fafc; }
-    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid #f1f5f9; font-size: 11.5px; line-height: 1.3; color: #475569; }
+    .units-drawer { border-top: 1px dashed var(--slate-200); background: #f8fafc; padding: 6px 12px 8px 38px; }
+    .unit-item { display: flex; align-items: flex-start; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--slate-200); font-size: 12px; color: var(--slate-700); }
     .unit-item:last-child { border-bottom: none; }
-    input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--brand); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
 
-    /* PACING METRICS DASHBOARD */
-    .pace-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; margin-top: 10px; }
-    .pace-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
-    .pace-stat-tile { background: #fff; padding: 8px; border-radius: 8px; border: 1px solid var(--border); text-align: center; }
-    .pace-stat-tile strong { font-size: 17px; color: var(--brand); display: block; }
-    .pace-stat-tile span { font-size: 10.5px; color: var(--muted); }
-
-    .progress-track { background: #e2e8f0; border-radius: 999px; height: 10px; overflow: hidden; margin: 6px 0 12px; }
-    .progress-fill { height: 100%; background: var(--brand); width: 0%; transition: width 0.4s ease; }
-    .badge { display: inline-block; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1; }
-    .hidden { display: none !important; }
-
-    /* BACKUP MODAL */
+    /* MODAL BASE */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(15,23,42,0.65);
-      display: none; align-items: center; justify-content: center;
-      z-index: 9999; padding: 16px;
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center; z-index: 9999; padding: 14px;
     }
-    .modal-box {
-      background: #fff; border-radius: 14px; max-width: 440px; width: 100%;
-      padding: 16px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    .modal-dialog {
+      background: #ffffff; border-radius: var(--radius-lg); width: 100%; max-width: 480px;
+      max-height: 88vh; overflow-y: auto; padding: 18px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
     }
-    textarea { width: 100%; height: 90px; font-family: monospace; font-size: 11px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; resize: none; margin-top: 6px; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .modal-close-btn {
+      width: 30px; height: 30px; border-radius: 8px; background: var(--slate-100);
+      border: 1px solid var(--slate-200); font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
 
-    .close-modal-btn {
-      width: 32px !important;
-      height: 32px !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      background: #f1f5f9 !important;
-      color: #475569 !important;
-      border: 1px solid #cbd5e1 !important;
-      border-radius: 8px !important;
-      font-size: 15px !important;
-      font-weight: bold !important;
-      cursor: pointer !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      flex-shrink: 0 !important;
+    /* PACING MODAL SPECIFICS */
+    .mode-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0; }
+    .mode-chip {
+      background: var(--slate-50); border: 1.5px solid var(--slate-200); border-radius: var(--radius-sm);
+      padding: 8px 4px; text-align: center; font-size: 11.5px; font-weight: 700; cursor: pointer; color: var(--slate-700);
     }
-    .close-modal-btn:hover {
-      background: #fee2e2 !important;
-      color: var(--danger) !important;
-      border-color: #fca5a5 !important;
+    .mode-chip.active { background: var(--brand); color: #fff; border-color: var(--brand); box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3); }
+    .mode-chip small { display: block; font-size: 9.5px; font-weight: normal; opacity: 0.85; }
+
+    .overall-pace-banner {
+      background: #fdf4ff; border: 1.5px solid #f0abfc; border-radius: var(--radius-md);
+      padding: 12px; margin-bottom: 12px; text-align: center;
     }
+    .overall-pace-banner strong { font-size: 15px; color: #86198f; display: block; }
+    .overall-pace-banner span { font-size: 11.5px; color: #a21caf; font-weight: 600; }
+
+    /* REALISTIC RISK CARDS */
+    .sub-quota-card {
+      border-radius: var(--radius-md); padding: 12px; margin-top: 10px; border-width: 1.5px; border-style: solid;
+      display: flex; flex-direction: column; gap: 8px; transition: all 0.2s;
+    }
+    .sub-quota-card.risk-low { background: #ecfdf5; border-color: #6ee7b7; }
+    .sub-quota-card.risk-low .quota-headline { color: #047857; }
+    .sub-quota-card.risk-low .risk-pill { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+
+    .sub-quota-card.risk-med { background: #fffbeb; border-color: #fcd34d; }
+    .sub-quota-card.risk-med .quota-headline { color: #b45309; }
+    .sub-quota-card.risk-med .risk-pill { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+
+    .sub-quota-card.risk-high { background: #fff1f2; border-color: #fda4af; }
+    .sub-quota-card.risk-high .quota-headline { color: #be123c; }
+    .sub-quota-card.risk-high .risk-pill { background: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; }
+
+    .sub-quota-header { display: flex; justify-content: space-between; align-items: center; }
+    .sub-quota-header strong { font-size: 13.5px; color: var(--slate-900); }
+    .risk-pill { font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; letter-spacing: 0.04em; }
+
+    .quota-action-line {
+      display: flex; justify-content: space-between; align-items: baseline;
+      border-top: 1px dashed rgba(0,0,0,0.1); padding-top: 6px;
+    }
+    .quota-headline { font-size: 14.5px; font-weight: 900; }
+    .quota-slots-info { font-size: 11px; font-weight: 700; color: var(--slate-600); }
+
+    .btn-main {
+      width: 100%; background: var(--brand); color: #fff; border: none;
+      border-radius: var(--radius-md); padding: 12px; font-size: 14px; font-weight: 800; cursor: pointer; margin-top: 14px;
+    }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- TOP BAR: COUNTDOWN & BACKUP -->
-  <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-    <div id="countdown-badge" class="badge">⏳ Calculating...</div>
-    <div style="display:flex; gap:6px;">
-      <button onclick="togglePlanSettings()" style="width:auto; padding:4px 8px; font-size:11px; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-weight:600; cursor:pointer;">⚙ Plan</button>
-      <button onclick="openBackupModal()" style="width:auto; padding:4px 8px; font-size:11px; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-weight:600; cursor:pointer;">💾 Backup</button>
+  <!-- HEADER -->
+  <header class="app-header">
+    <div>
+      <div class="brand-title">CA Foundation Tracker</div>
+      <div class="brand-subtitle">ICAI Exam Schedule • Jan 3, 5, 7, 9</div>
     </div>
-  </div>
+    <div class="top-actions">
+      <button type="button" class="action-btn" onclick="openPacingModal()">⚡ Pacing & Quota</button>
+      <button type="button" class="action-btn" onclick="openBackupModal()">💾 Backup</button>
+    </div>
+  </header>
 
-  <!-- STUDY PACING CONFIGURATION (DRAWER) -->
-  <div id="plan-settings-card" class="card">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3 style="margin:0;">🎯 Study Schedule & Target Pacing</h3>
-      <span style="font-size:11px; color:var(--muted);">Jan 3, 2027 Exam</span>
-    </div>
-    
-    <label class="field-label">How many subjects do you study in a day?</label>
-    <div class="tile-grid">
-      <div class="tile-btn" id="sub-mode-1" onclick="setSubjectsPerDay(1)">1 Sub<br><small>Full Day</small></div>
-      <div class="tile-btn" id="sub-mode-2" onclick="setSubjectsPerDay(2)">2 Subs<br><small>Half Day</small></div>
-      <div class="tile-btn" id="sub-mode-3" onclick="setSubjectsPerDay(3)">3 Subs<br><small>1/3 Day</small></div>
-      <div class="tile-btn" id="sub-mode-4" onclick="setSubjectsPerDay(4)">4 Subs<br><small>Quarter</small></div>
+  <!-- HERO READINESS BAR -->
+  <section class="hero-card">
+    <div class="hero-top">
+      <div>
+        <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:#c7d2fe; font-weight:700;">Overall Preparedness</span>
+        <div style="font-size:12px; color:#e0e7ff; margin-top:2px;">Weighted Syllabus, RTP & Mocks</div>
+      </div>
+      <div class="hero-pct" id="hero-readiness-label">0%</div>
     </div>
 
-    <div style="display:flex; gap:10px; margin-top:10px;">
-      <div style="flex:1;">
-        <label class="field-label" style="margin-top:0;">Final Revision Buffer</label>
-        <div style="display:flex; align-items:center; gap:4px;">
-          <input type="number" id="buffer-days-input" min="0" onchange="updateBufferDays(this.value)" style="padding:6px 8px; font-size:13px;">
-          <span style="font-size:12px; color:var(--muted); white-space:nowrap;">Days for RTP/Mocks</span>
-        </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="hero-progress-fill"></div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat-pill" onclick="openPacingModal()">
+        <strong id="stat-days-left">0</strong>
+        <span>Days Left</span>
+      </div>
+      <div class="hero-stat-pill" onclick="openPacingModal()">
+        <strong id="stat-units-needed">0.0</strong>
+        <span>Units / Day</span>
+      </div>
+      <div class="hero-stat-pill" onclick="openPacingModal()">
+        <strong id="stat-sessions-left">0</strong>
+        <span>Sessions Left</span>
       </div>
     </div>
+  </section>
 
-    <!-- PACING TARGET REPORT -->
-    <div class="pace-box" id="pacing-report-box"></div>
-  </div>
-
-  <!-- SCREEN 1: INPUT AND LOGGING -->
-  <div id="page-input" class="card">
-    <h2>Daily Revision Tracker</h2>
-    <p style="font-size: 12px; color: var(--muted); margin: 0 0 6px;">Tick covered chapters/units. Click "Omit" if dropping a chapter.</p>
-
-    <!-- HIGH-VISIBILITY SUBJECT PICKER -->
-    <div class="subject-picker-container">
-      <div class="subject-picker-badge">📚 Active Subject to Track</div>
-      <select id="subject-select" class="subject-picker-select" onchange="renderSubjectView()">
-        <option value="p1">Paper 1: Accounting (100 Marks)</option>
-        <option value="p2">Paper 2: Business Laws (100 Marks)</option>
-        <option value="p3">Paper 3: Quantitative Aptitude (100 Marks)</option>
-        <option value="p4">Paper 4: Business Economics (100 Marks)</option>
+  <!-- SCREEN 1: CHECKLIST VIEW -->
+  <main id="tracker-view">
+    <div class="subject-selector-card">
+      <div style="font-size:10px; font-weight:800; color:var(--brand); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">
+        Choose Paper to Log Progress
+      </div>
+      <select id="subject-dropdown" class="subject-dropdown" onchange="changeActiveSubject()">
+        <option value="p1">📗 Paper 1: Accounting (100 M)</option>
+        <option value="p2">📘 Paper 2: Business Laws (100 M)</option>
+        <option value="p3">📙 Paper 3: Quantitative Aptitude (100 M)</option>
+        <option value="p4">📕 Paper 4: Business Economics (100 M)</option>
       </select>
     </div>
 
-    <!-- PRACTICE METRICS -->
-    <div style="background:var(--brand-soft); border:1px solid #bfdbfe; border-radius:8px; padding:10px; margin-top:10px;">
-      <div style="font-size:11px; font-weight:700; color:var(--brand); text-transform:uppercase; margin-bottom:4px;">Practice Status</div>
-      <label class="unit-item" style="border:none; padding:0; color:#1e293b; font-weight:500;">
-        <input type="checkbox" id="rtp-checkbox" onchange="updateRtp(this.checked)">
-        <span>ICAI Revision Test Paper (RTP) Completed</span>
-      </label>
-      <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
-        <span style="font-size:11.5px; color:#334155; font-weight:500; flex:1;">Mock Exams Written:</span>
-        <input type="number" id="sub-mock-count" min="0" placeholder="0" onchange="updateSubMock(this.value)" style="width:60px; padding:5px 6px; margin:0; text-align:center; font-size:13px;">
+    <div class="practice-card">
+      <div class="practice-row">
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; cursor:pointer;">
+          <input type="checkbox" id="rtp-toggle" onchange="toggleRTPStatus(this.checked)">
+          <span>ICAI RTP (Revision Test Paper) Done</span>
+        </label>
+      </div>
+      <div class="practice-row" style="border-top:1px solid var(--slate-100); padding-top:6px;">
+        <span style="font-size:12.5px; font-weight:700; color:var(--slate-700);">Timed MTPs Written:</span>
+        <input type="number" id="mock-counter" min="0" placeholder="0" class="number-box" onchange="updateMockCount(this.value)">
       </div>
     </div>
 
-    <label class="field-label">Chapters & Units</label>
-    <div id="chapters-list"></div>
+    <div id="chapters-container"></div>
 
-    <button class="btn-primary" onclick="saveAndShowDashboard()">Save & View Readiness Dashboard</button>
-  </div>
-
-  <!-- SCREEN 2: READINESS DASHBOARD -->
-  <div id="page-dashboard" class="card hidden">
-    <h2>Revision Readiness</h2>
-
-    <div style="font-size:12px; font-weight:600; margin-top:6px;">
-      Total Exam Readiness (70% Target Syllabus + 15% RTPs + 15% Mocks)
-    </div>
-    <div class="progress-track"><div id="overall-bar" class="progress-fill" style="background:var(--success);"></div></div>
-    <div id="overall-label" style="font-size:12px; font-weight:700; text-align:right; margin-top:-8px;">0% Ready</div>
-
-    <h3 style="margin-top:14px;">Subject Breakdown</h3>
-    <div id="subject-bars-container"></div>
-
-    <div id="strategy-reminder" style="font-size:11px; color:var(--muted); border-top:1px solid var(--border); padding-top:8px; margin-top:10px; line-height:1.35;"></div>
-
-    <button onclick="showInputPage()" style="background:#475569; color:#fff; border:none; border-radius:8px; padding:10px; width:100%; margin-top:12px; font-weight:600; font-size:13px; cursor:pointer;">
-      + Log More Chapters / Edit
+    <button type="button" class="btn-main" onclick="switchView('dashboard')">
+      Open Subject-Wise Audit Dashboard →
     </button>
+  </main>
+
+  <!-- SCREEN 2: AUDIT VIEW -->
+  <main id="dashboard-view" class="hidden">
+    <div style="background:#fff; border-radius:var(--radius-lg); padding:16px; border:1px solid var(--slate-200);">
+      <h3 style="margin:0 0 4px; font-size:16px;">Detailed Subject Audit</h3>
+      <p style="font-size:12px; color:var(--slate-500); margin:0 0 12px;">Active completion status across all 4 foundation subjects:</p>
+
+      <div id="audit-subject-breakdown"></div>
+
+      <button type="button" class="btn-main" style="background:var(--slate-800);" onclick="switchView('tracker')">
+        ← Back to Chapter Checklist
+      </button>
+    </div>
+  </main>
+
+  <!-- PACING MODAL -->
+  <div id="pacing-modal" class="modal-overlay" onclick="closeOnModalOverlay(event, 'pacing-modal')">
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <div>
+          <h3 style="margin:0; font-size:16px; color:var(--slate-900);">⚡ Target Pacing & Velocity Engine</h3>
+          <span style="font-size:11px; color:var(--slate-500); font-weight:600;">Calibrated session requirements & risk</span>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closePacingModal()">✕</button>
+      </div>
+
+      <div class="overall-pace-banner" id="overall-pace-callout">
+        <strong>Calculating overall pace...</strong>
+        <span>Loading...</span>
+      </div>
+
+      <label style="font-size:11.5px; font-weight:700; color:var(--slate-700); text-transform:uppercase;">
+        Daily Study Model (Subjects per day)
+      </label>
+      <div class="mode-chips">
+        <div class="mode-chip" id="chip-1" onclick="setStudyMode(1)">1 Sub<small>Full-Day</small></div>
+        <div class="mode-chip" id="chip-2" onclick="setStudyMode(2)">2 Subs<small>Half-Day</small></div>
+        <div class="mode-chip" id="chip-3" onclick="setStudyMode(3)">3 Subs<small>1/3 Day</small></div>
+        <div class="mode-chip" id="chip-4" onclick="setStudyMode(4)">4 Subs<small>Quarter</small></div>
+      </div>
+
+      <div style="background:var(--slate-50); border:1px solid var(--slate-200); border-radius:var(--radius-sm); padding:10px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span style="font-size:12.5px; font-weight:700; display:block;">Final Revision Buffer</span>
+          <span style="font-size:10.5px; color:var(--slate-500);">Reserved purely for RTPs & Mock tests</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <input type="number" id="modal-buffer-input" min="0" class="number-box" style="width:55px;" onchange="setBufferDays(this.value)">
+          <span style="font-size:11px; font-weight:700; color:var(--slate-600);">Days</span>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <div style="font-size:12px; font-weight:800; color:var(--slate-800); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;">
+          Subject Specific Session Targets
+        </div>
+        <div id="subject-quotas-list"></div>
+      </div>
+
+      <button type="button" class="btn-main" onclick="closePacingModal()">
+        Got It, Apply Pacing
+      </button>
+    </div>
   </div>
 
-  <!-- BACKUP & RESTORE MODAL -->
-  <div id="backup-modal" class="modal-overlay" onclick="handleOverlayClick(event)">
-    <div class="modal-box" onclick="event.stopPropagation()">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3 style="margin:0;">💾 Backup & Restore Data</h3>
-        <button type="button" class="close-modal-btn" onclick="closeBackupModal()">✕</button>
-      </div>
-      <p style="font-size:11.5px; color:var(--muted); margin:6px 0 8px;">Never lose your progress. Copy your backup string or restore from a previous one:</p>
-      
-      <label class="field-label" style="margin-top:4px;">Your Backup Code (Save in WhatsApp/Notes):</label>
-      <textarea id="backup-string" readonly onclick="this.select()"></textarea>
-
-      <div style="display:flex; gap:6px; margin-top:8px;">
-        <button type="button" onclick="copyBackupToClipboard()" style="padding:8px; font-size:12px; background:var(--brand); color:#fff; font-weight:600; border-radius:6px; border:none; cursor:pointer;">📋 Copy Code</button>
-        <button type="button" onclick="downloadBackupFile()" style="padding:8px; font-size:12px; background:#0f172a; color:#fff; font-weight:600; border-radius:6px; border:none; cursor:pointer;">⬇️ Download File</button>
+  <!-- BACKUP & RESTORE MODAL (FILE-ONLY) -->
+  <div id="backup-modal" class="modal-overlay" onclick="closeOnModalOverlay(event, 'backup-modal')">
+    <div class="modal-dialog">
+      <div class="modal-head">
+        <h3 style="margin:0; font-size:16px;">💾 Transfer & Restore Progress</h3>
+        <button type="button" class="modal-close-btn" onclick="closeBackupModal()">✕</button>
       </div>
 
-      <hr style="border:0; border-top:1px solid var(--border); margin:12px 0;">
+      <p style="font-size:12px; color:var(--slate-600); margin:0 0 14px; line-height: 1.5;">
+        Save your progress to a file to transfer between devices via WhatsApp or store safely offline.
+      </p>
 
-      <label class="field-label" style="margin-top:0;">Restore From Saved Code:</label>
-      <input type="text" id="restore-input" placeholder="Paste backup text here..." style="font-size:12px; padding:8px;">
-      <button type="button" onclick="restoreFromCode()" style="margin-top:6px; padding:8px; font-size:12px; background:var(--success); color:#fff; font-weight:600; border-radius:6px; border:none; cursor:pointer;">🔄 Restore Progress</button>
+      <!-- 1. Download Option -->
+      <div style="margin-bottom: 16px;">
+        <label style="font-size:11px; font-weight:700; color:var(--slate-500); text-transform:uppercase; display:block; margin-bottom: 6px;">
+          Export to Another Device
+        </label>
+        <button type="button" class="action-btn" style="width:100%; justify-content:center; background:var(--brand); color:#fff; border-color:var(--brand); padding: 11px; font-size: 13px;" onclick="downloadBackupFile()">
+          ⬇ Download Backup File (.json)
+        </button>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--slate-200); margin-bottom:14px;">
+
+      <!-- 2. Restore Option -->
+      <div>
+        <label style="font-size:11px; font-weight:700; color:var(--slate-500); text-transform:uppercase; display:block; margin-bottom: 6px;">
+          Import Progress File
+        </label>
+        <input type="file" id="restore-file-input" accept=".json,application/json" style="display:none;" onchange="handleFileUpload(event)">
+        <button type="button" class="btn-main" style="margin-top:0; background:var(--success); padding:11px; font-size: 13px;" onclick="document.getElementById('restore-file-input').click()">
+          📁 Restore from Backup File
+        </button>
+      </div>
     </div>
   </div>
 
 </div>
 
 <script>
-  const DEFAULT_EXAM_DATE = "2027-01-03";
+  const EXAM_DATE = "2027-01-03";
 
-  const SYLLABUS_TREE = {
+  const SYLLABUS = {
     p1: {
       name: "Paper 1: Accounting",
       chapters: [
         {
           title: "Ch 1: Theoretical Framework",
           units: [
-            "Unit 1: Meaning and Scope of Accounting",
-            "Unit 2: Accounting Concepts & Principles",
-            "Unit 3: Capital & Revenue Expenditures/Receipts",
+            "Unit 1: Meaning & Scope of Accounting",
+            "Unit 2: Accounting Concepts, Principles & Conventions",
+            "Unit 3: Capital & Revenue Expenditures and Receipts",
             "Unit 4: Contingent Assets & Liabilities",
             "Unit 5: Accounting Policies",
             "Unit 6: Measurement & Valuation Principles",
@@ -278,7 +410,7 @@
         {
           title: "Ch 2: Accounting Process",
           units: [
-            "Unit 1: Journal Entries",
+            "Unit 1: Basic Journal Entries",
             "Unit 2: Ledgers",
             "Unit 3: Trial Balance",
             "Unit 4: Subsidiary Books",
@@ -286,10 +418,10 @@
             "Unit 6: Rectification of Errors"
           ]
         },
-        { title: "Ch 3: Bank Reconciliation Statement", units: ["BRS Concepts, Causes of Differences & Adjustments"] },
-        { title: "Ch 4: Inventories", units: ["Cost Formulas, FIFO, Weighted Avg & Valuation"] },
-        { title: "Ch 5: Depreciation & Amortisation", units: ["Methods of Depreciation, Changes & Computation"] },
-        { title: "Ch 6: Bills of Exchange & Promissory Notes", units: ["Dishonour, Renewal & Accommodation Bills"] },
+        { title: "Ch 3: Bank Reconciliation Statement", units: ["BRS Adjustments, Cash Book & Balance Comparisons"] },
+        { title: "Ch 4: Inventories", units: ["FIFO, Weighted Average, Periodic vs Perpetual Valuation"] },
+        { title: "Ch 5: Depreciation & Amortisation", units: ["SLM, WDV, Machine Hour Rate, Estimates & Changes"] },
+        { title: "Ch 6: Bills of Exchange & Promissory Notes", units: ["Dishonour, Renewal, Insolvency & Accommodation Bills"] },
         {
           title: "Ch 7: Final Accounts of Sole Proprietors",
           units: [
@@ -298,11 +430,11 @@
           ]
         },
         { title: "Ch 8: Financial Statements of NPO", units: ["Receipts & Payments, Income & Expenditure, Balance Sheet"] },
-        { title: "Ch 9: Accounts from Incomplete Records", units: ["Single Entry System & Statement of Affairs"] },
+        { title: "Ch 9: Accounts from Incomplete Records", units: ["Single Entry Conversion & Statement of Affairs"] },
         {
           title: "Ch 10: Partnership and LLP Accounts",
           units: [
-            "Unit 1: Introduction to Partnership",
+            "Unit 1: Intro to Partnership",
             "Unit 2: Treatment of Goodwill",
             "Unit 3: Admission of a Partner",
             "Unit 4: Retirement of a Partner",
@@ -326,13 +458,13 @@
     p2: {
       name: "Paper 2: Business Laws",
       chapters: [
-        { title: "Ch 1: Indian Regulatory Framework", units: ["Sources of Law, Regulatory Bodies & Court Hierarchy"] },
+        { title: "Ch 1: Indian Regulatory Framework", units: ["Court Structure, Enactment & Regulatory Bodies"] },
         {
           title: "Ch 2: The Indian Contract Act, 1872",
           units: [
             "Unit 1: Nature of Contracts",
             "Unit 2: Consideration",
-            "Unit 3: Other Essential Elements",
+            "Unit 3: Essential Elements of Contracts",
             "Unit 4: Performance of Contract",
             "Unit 5: Breach of Contract & Remedies",
             "Unit 6: Contingent & Quasi Contracts",
@@ -346,7 +478,7 @@
           units: [
             "Unit 1: Formation of Contract of Sale",
             "Unit 2: Conditions & Warranties",
-            "Unit 3: Transfer of Ownership & Delivery",
+            "Unit 3: Transfer of Ownership",
             "Unit 4: Unpaid Seller Rights"
           ]
         },
@@ -358,430 +490,463 @@
             "Unit 3: Registration & Dissolution"
           ]
         },
-        { title: "Ch 5: The Limited Liability Partnership Act", units: ["Characteristics, Incorporation & Partner Relations"] },
-        { title: "Ch 6: The Companies Act, 2013", units: ["Company Types, MOA, AOA & Incorporation"] },
-        { title: "Ch 7: The Negotiable Instruments Act", units: ["Promissory Notes, Cheques, Negotiation & Dishonour"] }
+        { title: "Ch 5: The Limited Liability Partnership Act", units: ["LLP Structure, Incorporation & Partners"] },
+        { title: "Ch 6: The Companies Act, 2013", units: ["Company Formation, MOA, AOA & Capital Types"] },
+        { title: "Ch 7: The Negotiable Instruments Act", units: ["Promissory Notes, Cheques & Crossing"] }
       ]
     },
     p3: {
       name: "Paper 3: Quantitative Aptitude",
       chapters: [
-        {
-          title: "Part A: Business Mathematics",
-          units: [
-            "Ch 1: Ratio, Proportion, Indices, Logarithms",
-            "Ch 2: Equations (Linear, Quadratic, Matrices)",
-            "Ch 3: Linear Inequalities",
-            "Ch 4: Mathematics of Finance (TVM, Annuity)",
-            "Ch 5: Permutations and Combinations",
-            "Ch 6: Sequence and Series (AP & GP)",
-            "Ch 7: Sets, Relations, Functions, Limits",
-            "Ch 8: Differential & Integral Calculus"
-          ]
-        },
-        {
-          title: "Part B: Logical Reasoning",
-          units: [
-            "Ch 9: Number Series, Coding-Decoding",
-            "Ch 10: Direction Tests",
-            "Ch 11: Seating Arrangements",
-            "Ch 12: Blood Relations"
-          ]
-        },
-        {
-          title: "Part C: Statistics",
-          units: [
-            "Ch 13: Statistical Representation & Sampling",
-            "Ch 14: Central Tendency & Dispersion",
-            "Ch 15: Probability",
-            "Ch 16: Theoretical Distributions",
-            "Ch 17: Correlation & Regression",
-            "Ch 18: Index Numbers"
-          ]
-        }
+        /* PART A */
+        { sectionPart: "Part A: Business Mathematics (40 Marks)", title: "Ch 1: Ratio, Proportion, Indices and Logarithms", units: ["Ratio and Proportion Concepts", "Indices Rules & Equations", "Logarithms & Practice Problems"] },
+        { title: "Ch 2: Equations", units: ["Linear Equations (Two & Three Variables)", "Quadratic Equations", "Matrices and Determinants Basics"] },
+        { title: "Ch 3: Linear Inequalities", units: ["Linear Inequalities in One & Two Variables", "Objective Functions & Graphical Solutions"] },
+        { title: "Ch 4: Mathematics of Finance", units: ["Simple and Compound Interest", "Effective Rate of Interest", "Annuity (Regular, Due, Present & Future Value)", "Perpetuity, Sinking Fund & Applications"] },
+        { title: "Ch 5: Permutations and Combinations", units: ["Fundamental Principles of Counting", "Permutations (Arrangements)", "Combinations (Selections) & Circular Formations"] },
+        { title: "Ch 6: Sequence and Series", units: ["Arithmetic Progression (AP)", "Geometric Progression (GP)", "Special Series & Computation"] },
+        { title: "Ch 7: Sets, Relations, Functions and Limits", units: ["Sets and Set Operations", "Relations and Types of Relations", "Functions & Domain/Range", "Limits and Continuity Basics"] },
+        { title: "Ch 8: Basic Applications of Differential & Integral Calculus", units: ["Derivative Rules and Standard Derivatives", "Applications of Derivatives (Marginal Cost, Revenue)", "Integral Calculus & Standard Integrals"] },
+
+        /* PART B */
+        { sectionPart: "Part B: Logical Reasoning (20 Marks)", title: "Ch 9: Number Series, Coding and Decoding", units: ["Series Formation & Missing Numbers", "Coding and Decoding Techniques", "Odd Man Out Identification"] },
+        { title: "Ch 10: Direction Tests", units: ["Compass Directions, Distance Computation & Turns"] },
+        { title: "Ch 11: Seating Arrangements", units: ["Linear Seating Arrangements", "Circular & Rectangular Seating Arrangements"] },
+        { title: "Ch 12: Blood Relations", units: ["Direct & Coded Family Relationships", "Generation Trees & Deduction"] },
+
+        /* PART C */
+        { sectionPart: "Part C: Statistics (40 Marks)", title: "Ch 13: Statistical Representation of Data & Sampling", units: ["Collection of Data & Classification", "Tabulation and Graphical Presentation (Histograms, Ogives)", "Sampling Methods and Sampling Distributions"] },
+        { title: "Ch 14: Measures of Central Tendency and Dispersion", units: ["Mean, Median, Mode, Geometric & Harmonic Mean", "Range, Mean Deviation & Quartile Deviation", "Standard Deviation, Variance & Coefficient of Variation"] },
+        { title: "Ch 15: Probability", units: ["Classical and Axiomatic Probability", "Addition & Multiplication Theorems", "Conditional Probability & Bayes' Theorem"] },
+        { title: "Ch 16: Theoretical Distributions", units: ["Binomial Distribution Properties & Problems", "Poisson Distribution Properties & Problems", "Normal Distribution & Standard Normal Curves"] },
+        { title: "Ch 17: Correlation and Regression", units: ["Karl Pearson's Coefficient of Correlation", "Rank Correlation (Spearman's)", "Regression Lines, Coefficients & Properties"] },
+        { title: "Ch 18: Index Numbers", units: ["Laspeyres, Paasche, Fisher & Marshall-Edgeworth", "Tests of Adequacy (Time & Factor Reversal)", "Consumer Price Index (CPI) & Real Income"] }
       ]
     },
     p4: {
       name: "Paper 4: Business Economics",
       chapters: [
-        { title: "Ch 1: Nature & Scope of Economics", units: ["Unit 1: Intro to Economics", "Unit 2: Basic Problems & Price Mechanism"] },
-        { title: "Ch 2: Theory of Demand and Supply", units: ["Unit 1: Demand & Elasticity", "Unit 2: Consumer Behaviour", "Unit 3: Supply Analysis"] },
-        { title: "Ch 3: Theory of Production & Cost", units: ["Unit 1: Theory of Production", "Unit 2: Theory of Cost"] },
-        { title: "Ch 4: Market Price Determination", units: ["Unit 1: Market Forms", "Unit 2: Price Determination", "Unit 3: Price-Output Analysis"] },
-        { title: "Ch 5: Business Cycles", units: ["Phases, Features & Causes of Business Cycles"] },
-        { title: "Ch 6: Determination of National Income", units: ["Unit 1: National Income Accounting", "Unit 2: Keynesian Theory"] },
-        { title: "Ch 7: Public Finance", units: ["Unit 1: Fiscal Functions", "Unit 2: Market Failure", "Unit 3: Budget & Debt", "Unit 4: Fiscal Policy"] },
-        { title: "Ch 8: Money Market", units: ["Unit 1: Money Demand", "Unit 2: Money Supply", "Unit 3: Monetary Policy"] },
-        { title: "Ch 9: International Trade", units: ["Unit 1: Trade Theories", "Unit 2: Trade Policy", "Unit 3: Negotiations", "Unit 4: Exchange Rates", "Unit 5: Capital Flows"] },
-        { title: "Ch 10: Indian Economy", units: ["Agriculture, Industry, Services & Economic Reforms"] }
+        { title: "Ch 1: Nature & Scope of Economics", units: ["Unit 1: Basics", "Unit 2: Economic Problems & Price Mechanism"] },
+        { title: "Ch 2: Demand and Supply", units: ["Unit 1: Demand & Elasticity", "Unit 2: Consumer Behaviour", "Unit 3: Supply"] },
+        { title: "Ch 3: Production and Cost", units: ["Unit 1: Production Theory", "Unit 2: Cost Theory"] },
+        { title: "Ch 4: Market Price Determination", units: ["Unit 1: Forms of Market", "Unit 2: Price Determination", "Unit 3: Equilibrium"] },
+        { title: "Ch 5: Business Cycles", units: ["Phases & Indicators of Cycles"] },
+        { title: "Ch 6: Determination of National Income", units: ["Unit 1: National Income Accounting", "Unit 2: Keynesian Framework"] },
+        { title: "Ch 7: Public Finance", units: ["Unit 1: Fiscal Functions", "Unit 2: Market Failure", "Unit 3: Budget & Debt", "Unit 4: Policy"] },
+        { title: "Ch 8: Money Market", units: ["Unit 1: Money Demand", "Unit 2: Supply of Money", "Unit 3: Monetary Policy"] },
+        { title: "Ch 9: International Trade", units: ["Unit 1: Theories", "Unit 2: Trade Policy", "Unit 3: Exchange Rates", "Unit 4: Capital Flows"] },
+        { title: "Ch 10: Indian Economy", units: ["Sectors, Trends & Structural Reforms"] }
       ]
     }
   };
 
-  // APP STATE
-  let appData = JSON.parse(localStorage.getItem("ca_found_revision_state")) || {
-    completedUnits: {},
-    omittedChapters: {},
-    rtpDone: {},
-    mocksDone: {},
-    subjectsPerDay: 2,
-    bufferDays: null
+  let state = JSON.parse(localStorage.getItem("ca_found_pro_state")) || {
+    completed: {},
+    omitted: {},
+    rtp: {},
+    mocks: {},
+    perDay: 2,
+    buffer: null
   };
 
-  function calculateCountdown() {
-    const today = new Date();
-    const examDate = new Date(DEFAULT_EXAM_DATE);
-    const diffDays = Math.ceil((examDate - today) / (1000 * 60 * 60 * 24));
-    return diffDays > 0 ? diffDays : 0;
+  function persist() {
+    localStorage.setItem("ca_found_pro_state", JSON.stringify(state));
+    updateGlobalMetrics();
   }
 
-  function setSubjectsPerDay(num) {
-    appData.subjectsPerDay = num;
-    saveToStorage();
-    updatePlanUI();
+  function getDaysRemaining() {
+    const diff = new Date(EXAM_DATE) - new Date();
+    return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   }
 
-  function updateBufferDays(val) {
-    appData.bufferDays = Math.max(0, parseInt(val) || 0);
-    saveToStorage();
-    updatePlanUI();
+  function setStudyMode(n) {
+    state.perDay = n;
+    persist();
+    renderPacingModal();
   }
 
-  function updatePlanUI() {
-    const totalDays = calculateCountdown();
-    document.getElementById("countdown-badge").innerText = `⏳ ${totalDays} days to Jan 3`;
+  function setBufferDays(val) {
+    state.buffer = Math.max(0, parseInt(val) || 0);
+    persist();
+    renderPacingModal();
+  }
 
-    if (appData.bufferDays === null || appData.bufferDays === undefined) {
-      appData.bufferDays = Math.max(5, Math.floor(totalDays * 0.20));
-    }
-    document.getElementById("buffer-days-input").value = appData.bufferDays;
+  function updateGlobalMetrics() {
+    const totalDays = getDaysRemaining();
+    document.getElementById("stat-days-left").innerText = totalDays;
 
-    for (let i = 1; i <= 4; i++) {
-      const tile = document.getElementById(`sub-mode-${i}`);
-      if (tile) tile.classList.toggle("active", (appData.subjectsPerDay || 2) === i);
+    if (state.buffer === null || state.buffer === undefined) {
+      state.buffer = Math.max(5, Math.floor(totalDays * 0.20));
     }
 
-    const studyDaysAvailable = Math.max(1, totalDays - appData.bufferDays);
-    const mode = appData.subjectsPerDay || 2;
-    const sessionsPerSub = ((studyDaysAvailable * mode) / 4).toFixed(1);
+    const studyDays = Math.max(1, totalDays - state.buffer);
+    const mode = state.perDay || 2;
+    const totalSessions = Math.round((studyDays * mode) / 4);
+    document.getElementById("stat-sessions-left").innerText = `${totalSessions} ses.`;
 
-    let totalTargetUnits = 0;
+    let totalUnits = 0;
     let doneUnits = 0;
-    let totalTargetChapters = 0;
-    let doneChapters = 0;
 
-    Object.keys(SYLLABUS_TREE).forEach(subKey => {
-      SYLLABUS_TREE[subKey].chapters.forEach((chap, cIdx) => {
+    Object.keys(SYLLABUS).forEach(subKey => {
+      SYLLABUS[subKey].chapters.forEach((chap, cIdx) => {
         const chapKey = `${subKey}_c${cIdx}`;
-        if (!appData.omittedChapters[chapKey]) {
-          totalTargetChapters++;
-          let chapAllDone = true;
+        if (!state.omitted[chapKey]) {
           chap.units.forEach((_, uIdx) => {
-            totalTargetUnits++;
-            if (appData.completedUnits[`${subKey}_c${cIdx}_u${uIdx}`]) {
-              doneUnits++;
-            } else {
-              chapAllDone = false;
-            }
+            totalUnits++;
+            if (state.completed[`${subKey}_c${cIdx}_u${uIdx}`]) doneUnits++;
           });
-          if (chapAllDone) doneChapters++;
         }
       });
     });
 
-    const unitsRemaining = Math.max(0, totalTargetUnits - doneUnits);
-    const chapsRemaining = Math.max(0, totalTargetChapters - doneChapters);
+    const pendingUnits = Math.max(0, totalUnits - doneUnits);
+    const unitsPerDay = (pendingUnits / studyDays).toFixed(1);
+    document.getElementById("stat-units-needed").innerText = unitsPerDay;
 
-    const unitsPerDay = (unitsRemaining / studyDaysAvailable).toFixed(1);
-    const chapsPerDay = (chapsRemaining / studyDaysAvailable).toFixed(2);
+    let rtpCount = 0;
+    let mockTotal = 0;
+    Object.keys(SYLLABUS).forEach(k => {
+      if (state.rtp[k]) rtpCount++;
+      mockTotal += (state.mocks[k] || 0);
+    });
 
-    let slotName = "Half-Days";
-    if (mode === 1) slotName = "Full Days";
-    if (mode === 3) slotName = "1/3rd Days";
-    if (mode === 4) slotName = "Quarter Days";
+    const unitScore = totalUnits > 0 ? (doneUnits / totalUnits) * 70 : 70;
+    const rtpScore = (rtpCount / 4) * 15;
+    const mockScore = Math.min(15, (mockTotal / 8) * 15);
+    const totalScore = Math.round(unitScore + rtpScore + mockScore);
 
-    document.getElementById("pacing-report-box").innerHTML = `
-      <div style="font-size:11.5px; font-weight:700; color:var(--primary); margin-bottom:4px;">⏱️ Your Calculated Revision Pace</div>
-      <div class="pace-stat-grid">
-        <div class="pace-stat-tile">
-          <strong>${unitsPerDay}</strong>
-          <span>Units / Day Needed</span>
+    document.getElementById("hero-progress-fill").style.width = `${totalScore}%`;
+    document.getElementById("hero-readiness-label").innerText = `${totalScore}%`;
+  }
+
+  /* ACCURATE STUDY PACING & CALIBRATED RISK ENGINE */
+  function renderPacingModal() {
+    for (let i = 1; i <= 4; i++) {
+      const chip = document.getElementById(`chip-${i}`);
+      if (chip) chip.classList.toggle("active", (state.perDay || 2) === i);
+    }
+
+    document.getElementById("modal-buffer-input").value = state.buffer;
+
+    const totalDays = getDaysRemaining();
+    const studyDays = Math.max(1, totalDays - (state.buffer || 0));
+    const mode = state.perDay || 2; // 1 = Full Day, 2 = Half Day, 3 = 1/3 Day, 4 = Quarter Day
+
+    const effectiveFullDaysPerSub = Math.max(0.25, studyDays / 4);
+    const totalSessionsPerSub = Math.max(1, effectiveFullDaysPerSub * mode);
+
+    let sessionName = "Full Day";
+    if (mode === 2) sessionName = "Half-Day";
+    else if (mode === 3) sessionName = "1/3rd Day";
+    else if (mode === 4) sessionName = "Quarter-Day";
+
+    let grandPendingUnits = 0;
+    let grandPendingChapters = 0;
+
+    const quotaList = document.getElementById("subject-quotas-list");
+    quotaList.innerHTML = "";
+
+    Object.keys(SYLLABUS).forEach(subKey => {
+      const sub = SYLLABUS[subKey];
+      let subUnits = 0;
+      let subDoneUnits = 0;
+      let subChaps = 0;
+      let subDoneChaps = 0;
+
+      sub.chapters.forEach((chap, cIdx) => {
+        const chapKey = `${subKey}_c${cIdx}`;
+        if (!state.omitted[chapKey]) {
+          subChaps++;
+          let chapComplete = true;
+          chap.units.forEach((_, uIdx) => {
+            subUnits++;
+            if (state.completed[`${subKey}_c${cIdx}_u${uIdx}`]) {
+              subDoneUnits++;
+            } else {
+              chapComplete = false;
+            }
+          });
+          if (chapComplete) subDoneChaps++;
+        }
+      });
+
+      const pendingUnits = Math.max(0, subUnits - subDoneUnits);
+      const pendingChaps = Math.max(0, subChaps - subDoneChaps);
+
+      grandPendingUnits += pendingUnits;
+      grandPendingChapters += pendingChaps;
+
+      const chapsPerSession = (pendingChaps / totalSessionsPerSub).toFixed(1);
+      const unitsPerSession = (pendingUnits / totalSessionsPerSub).toFixed(1);
+      const fullDayChapsVelocity = (pendingChaps / effectiveFullDaysPerSub).toFixed(1);
+
+      let riskClass = "risk-low";
+      let riskLabel = "🟢 Low Risk (On Track)";
+
+      if (parseFloat(fullDayChapsVelocity) > 2.5) {
+        riskClass = "risk-high";
+        riskLabel = "🔴 Critical Risk (Unrealistic Pace)";
+      } else if (parseFloat(fullDayChapsVelocity) > 1.2) {
+        riskClass = "risk-med";
+        riskLabel = "🟡 Moderate Risk (Challenging)";
+      }
+
+      quotaList.innerHTML += `
+        <div class="sub-quota-card ${riskClass}">
+          <div class="sub-quota-header">
+            <strong>${sub.name}</strong>
+            <span class="risk-pill">${riskLabel}</span>
+          </div>
+
+          <div class="quota-action-line">
+            <span class="quota-headline">
+              Must cover: ${chapsPerSession} Chapters (${unitsPerSession} Units) per ${sessionName}
+            </span>
+            <span class="quota-slots-info">
+              ${totalSessionsPerSub.toFixed(0)} ${sessionName}s (${effectiveFullDaysPerSub.toFixed(1)} full-days net)
+            </span>
+          </div>
+
+          <div style="font-size:11px; color:var(--slate-600); display:flex; justify-content:space-between; align-items:center;">
+            <span>${pendingChaps} chapters left (${pendingUnits} units)</span>
+            <span style="font-weight:700;">Rate: ~${fullDayChapsVelocity} chaps/full day equiv.</span>
+          </div>
         </div>
-        <div class="pace-stat-tile">
-          <strong>${chapsPerDay}</strong>
-          <span>Chapters / Day Needed</span>
-        </div>
-        <div class="pace-stat-tile">
-          <strong>${studyDaysAvailable} Days</strong>
-          <span>First-Pass Study Window</span>
-        </div>
-        <div class="pace-stat-tile">
-          <strong>${sessionsPerSub} ${slotName}</strong>
-          <span>In Hand per Paper</span>
-        </div>
-      </div>
-      <div style="font-size:10.5px; color:var(--muted); margin-top:8px; line-height:1.35;">
-        *Calculated across <strong>${totalTargetChapters} active chapters</strong> (${unitsRemaining} units pending). Excludes ${Object.keys(appData.omittedChapters).length} omitted chapters and ${appData.bufferDays} revision buffer days.
-      </div>
+      `;
+    });
+
+    const overallChapsPerDay = (grandPendingChapters / studyDays).toFixed(1);
+    const overallUnitsPerDay = (grandPendingUnits / studyDays).toFixed(1);
+
+    document.getElementById("overall-pace-callout").innerHTML = `
+      <strong>Total Exam Target: ~${overallChapsPerDay} Chapters | ~${overallUnitsPerDay} Units per Day</strong>
+      <span>Across all subjects over the remaining ${studyDays} study days (leaving ${state.buffer} days buffer for RTPs/Mocks).</span>
     `;
   }
 
-  function togglePlanSettings() {
-    const card = document.getElementById("plan-settings-card");
-    card.classList.toggle("hidden");
-  }
-
-  function getButtonProgressGradient(pct) {
-    if (pct === 0) return '#f1f5f9';
-    return `linear-gradient(to right, #bfdbfe ${pct}%, #f1f5f9 ${pct}%)`;
-  }
-
-  function renderSubjectView() {
-    const sub = document.getElementById("subject-select").value;
-    document.getElementById("rtp-checkbox").checked = !!appData.rtpDone[sub];
-    document.getElementById("sub-mock-count").value = appData.mocksDone[sub] || "";
-
-    const container = document.getElementById("chapters-list");
-    container.innerHTML = "";
-
-    SYLLABUS_TREE[sub].chapters.forEach((chap, cIdx) => {
-      const chapKey = `${sub}_c${cIdx}`;
-      const isOmitted = !!appData.omittedChapters[chapKey];
-      const totalUnits = chap.units.length;
-      let completedUnitsCount = 0;
-
-      chap.units.forEach((_, uIdx) => {
-        if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) completedUnitsCount++;
-      });
-
-      const isAllDone = totalUnits > 0 && completedUnitsCount === totalUnits;
-      const pct = Math.round((completedUnitsCount / totalUnits) * 100);
-      const bgGradient = getButtonProgressGradient(pct);
-
-      let unitsHtml = "";
-      chap.units.forEach((uTitle, uIdx) => {
-        const uKey = `${sub}_c${cIdx}_u${uIdx}`;
-        const isUnitDone = appData.completedUnits[uKey] ? "checked" : "";
-        unitsHtml += `
-          <label class="unit-item">
-            <input type="checkbox" ${isUnitDone} ${isOmitted ? 'disabled' : ''} onchange="toggleSingleUnit('${sub}', ${cIdx}, ${uIdx}, this.checked)">
-            <span style="${isOmitted ? 'text-decoration:line-through; color:#94a3b8;' : ''}">${uTitle}</span>
-          </label>`;
-      });
-
-      const hasMultipleUnits = totalUnits > 1;
-
-      const cardHtml = `
-        <div class="chapter-card ${isOmitted ? 'omitted' : ''}" id="card-${sub}-${cIdx}">
-          <div class="chap-line1">
-            <div class="chap-title-group" onclick="handleTitleRowClick(event, '${sub}', ${cIdx})">
-              <input type="checkbox" id="chap-chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} ${isOmitted ? "disabled" : ""} onchange="toggleEntireChapter('${sub}', ${cIdx}, this.checked)">
-              <span class="chapter-title">${chap.title}</span>
-            </div>
-            <button type="button" class="omit-btn ${isOmitted ? 'is-omitted' : ''}" onclick="toggleOmitChapter('${sub}', ${cIdx})">
-              ${isOmitted ? 'Omitted ✕' : 'Omit'}
-            </button>
-          </div>
-
-          ${hasMultipleUnits && !isOmitted ? `
-          <div class="chap-line2">
-            <button type="button" class="expand-btn" id="btn-${sub}-${cIdx}" 
-              style="background: ${bgGradient};"
-              onclick="toggleUnitAccordion('units-${sub}-${cIdx}', this)">
-              <span id="btn-text-${sub}-${cIdx}">▾ ${totalUnits} Units</span>
-            </button>
-            <span class="chap-meta-text" id="chap-label-${sub}-${cIdx}">${completedUnitsCount}/${totalUnits} •${pct}%</span>
-          </div>
-
-          <div class="units-list hidden" id="units-${sub}-${cIdx}">
-            ${unitsHtml}
-          </div>
-          ` : ''}
-        </div>
-      `;
-      container.innerHTML += cardHtml;
-    });
-
-    updatePlanUI();
-  }
-
-  function handleTitleRowClick(e, sub, cIdx) {
-    if (appData.omittedChapters[`${sub}_c${cIdx}`]) return;
-    if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'button') return;
-    const chk = document.getElementById(`chap-chk-${sub}-${cIdx}`);
-    chk.checked = !chk.checked;
-    toggleEntireChapter(sub, cIdx, chk.checked);
-  }
-
-  function toggleOmitChapter(sub, cIdx) {
-    const key = `${sub}_c${cIdx}`;
-    if (appData.omittedChapters[key]) delete appData.omittedChapters[key];
-    else appData.omittedChapters[key] = true;
-    saveToStorage();
+  function changeActiveSubject() {
     renderSubjectView();
   }
 
-  function toggleUnitAccordion(id, btn) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const textSpan = btn.querySelector("span");
-    if (el.classList.contains("hidden")) {
-      el.classList.remove("hidden");
-      textSpan.innerText = textSpan.innerText.replace("▾", "▴");
-      btn.style.borderColor = "var(--brand)";
-    } else {
-      el.classList.add("hidden");
-      textSpan.innerText = textSpan.innerText.replace("▴", "▾");
-      btn.style.borderColor = "#cbd5e1";
-    }
-  }
+  function renderSubjectView() {
+    const sub = document.getElementById("subject-dropdown").value;
 
-  function toggleEntireChapter(sub, cIdx, isChecked) {
-    const chap = SYLLABUS_TREE[sub].chapters[cIdx];
-    chap.units.forEach((_, uIdx) => {
-      const uKey = `${sub}_c${cIdx}_u${uIdx}`;
-      if (isChecked) appData.completedUnits[uKey] = true;
-      else delete appData.completedUnits[uKey];
+    document.getElementById("rtp-toggle").checked = !!state.rtp[sub];
+    document.getElementById("mock-counter").value = state.mocks[sub] || "";
+
+    const container = document.getElementById("chapters-container");
+    container.innerHTML = "";
+
+    SYLLABUS[sub].chapters.forEach((chap, cIdx) => {
+      if (chap.sectionPart) {
+        const partDiv = document.createElement("div");
+        partDiv.className = "section-part-divider";
+        partDiv.innerText = chap.sectionPart;
+        container.appendChild(partDiv);
+      }
+
+      const chapKey = `${sub}_c${cIdx}`;
+      const isOmitted = !!state.omitted[chapKey];
+      const unitCount = chap.units.length;
+      let completedInChap = 0;
+
+      chap.units.forEach((_, uIdx) => {
+        if (state.completed[`${sub}_c${cIdx}_u${uIdx}`]) completedInChap++;
+      });
+
+      const isAllDone = unitCount > 0 && completedInChap === unitCount;
+      const pct = Math.round((completedInChap / unitCount) * 100);
+
+      let unitsHtml = "";
+      chap.units.forEach((title, uIdx) => {
+        const uKey = `${sub}_c${cIdx}_u${uIdx}`;
+        const checked = state.completed[uKey] ? "checked" : "";
+        unitsHtml += `
+          <div class="unit-item">
+            <input type="checkbox" id="unit-chk-${sub}-${cIdx}-${uIdx}" ${checked} ${isOmitted ? 'disabled' : ''} onchange="toggleUnit('${sub}', ${cIdx}, ${uIdx}, this.checked)">
+            <span style="${isOmitted ? 'text-decoration:line-through; color:var(--slate-400);' : ''}">${title}</span>
+          </div>`;
+      });
+
+      const hasMultiple = unitCount > 1;
+      const gradient = pct === 0 ? '#f1f5f9' : `linear-gradient(to right, #bfdbfe ${pct}%, #f1f5f9 ${pct}%)`;
+
+      const card = document.createElement("div");
+      card.className = `chapter-card ${isOmitted ? 'omitted' : ''}`;
+      card.id = `card-${sub}-${cIdx}`;
+      card.innerHTML = `
+        <div class="chap-line1">
+          <div class="chap-clickable-title" onclick="toggleChapterRowClick(event, '${sub}', ${cIdx})">
+            <input type="checkbox" id="chk-${sub}-${cIdx}" ${isAllDone ? "checked" : ""} ${isOmitted ? "disabled" : ""} onchange="toggleChapter('${sub}', ${cIdx}, this.checked)">
+            <div class="chap-title-text">${chap.title}</div>
+          </div>
+          <button type="button" class="omit-btn ${isOmitted ? 'active' : ''}" onclick="toggleOmission('${sub}', ${cIdx})">
+            ${isOmitted ? 'Omitted ✕' : 'Omit'}
+          </button>
+        </div>
+
+        ${hasMultiple && !isOmitted ? `
+          <div class="chap-line2">
+            <button type="button" class="expand-btn" id="btn-pill-${sub}-${cIdx}" style="background:${gradient};" onclick="toggleDrawer('drawer-${sub}-${cIdx}', this)">
+              <span>▾ ${unitCount} Units</span>
+            </button>
+            <span id="stat-label-${sub}-${cIdx}" style="font-size:11px; font-weight:700; color:var(--slate-500);">${completedInChap}/${unitCount} •${pct}%</span>
+          </div>
+          <div class="units-drawer hidden" id="drawer-${sub}-${cIdx}">
+            ${unitsHtml}
+          </div>
+        ` : ''}
+      `;
+      container.appendChild(card);
     });
-    saveToStorage();
-    refreshChapterProgress(sub, cIdx);
-    updatePlanUI();
+
+    updateGlobalMetrics();
   }
 
-  function toggleSingleUnit(sub, cIdx, uIdx, isChecked) {
-    const uKey = `${sub}_c${cIdx}_u${uIdx}`;
-    if (isChecked) appData.completedUnits[uKey] = true;
-    else delete appData.completedUnits[uKey];
-    saveToStorage();
-    refreshChapterProgress(sub, cIdx);
-    updatePlanUI();
-  }
-
-  function refreshChapterProgress(sub, cIdx) {
-    const chap = SYLLABUS_TREE[sub].chapters[cIdx];
+  function updateChapterProgressVisuals(sub, cIdx) {
+    const chap = SYLLABUS[sub].chapters[cIdx];
     const totalUnits = chap.units.length;
     let completedCount = 0;
 
     chap.units.forEach((_, uIdx) => {
-      if (appData.completedUnits[`${sub}_c${cIdx}_u${uIdx}`]) completedCount++;
+      const isDone = !!state.completed[`${sub}_c${cIdx}_u${uIdx}`];
+      if (isDone) completedCount++;
+      const unitChk = document.getElementById(`unit-chk-${sub}-${cIdx}-${uIdx}`);
+      if (unitChk) unitChk.checked = isDone;
     });
 
     const isAllDone = totalUnits > 0 && completedCount === totalUnits;
     const pct = Math.round((completedCount / totalUnits) * 100);
 
-    const chapChk = document.getElementById(`chap-chk-${sub}-${cIdx}`);
-    if (chapChk) chapChk.checked = isAllDone;
+    const mainChk = document.getElementById(`chk-${sub}-${cIdx}`);
+    if (mainChk) mainChk.checked = isAllDone;
 
-    const btn = document.getElementById(`btn-${sub}-${cIdx}`);
-    if (btn) btn.style.background = getButtonProgressGradient(pct);
+    const pill = document.getElementById(`btn-pill-${sub}-${cIdx}`);
+    if (pill) {
+      pill.style.background = pct === 0 ? '#f1f5f9' : `linear-gradient(to right, #bfdbfe ${pct}%, #f1f5f9 ${pct}%)`;
+    }
 
-    const label = document.getElementById(`chap-label-${sub}-${cIdx}`);
-    if (label) label.innerText = `${completedCount}/${totalUnits} • ${pct}%`;
+    const label = document.getElementById(`stat-label-${sub}-${cIdx}`);
+    if (label) {
+      label.innerText = `${completedCount}/${totalUnits} • ${pct}%`;
+    }
 
-    const unitsContainer = document.getElementById(`units-${sub}-${cIdx}`);
-    if (unitsContainer) {
-      const checkboxes = unitsContainer.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach((chk, idx) => {
-        chk.checked = !!appData.completedUnits[`${sub}_c${cIdx}_u${idx}`];
-      });
+    persist();
+  }
+
+  function toggleChapterRowClick(e, sub, cIdx) {
+    if (state.omitted[`${sub}_c${cIdx}`]) return;
+    if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'button') return;
+    const chk = document.getElementById(`chk-${sub}-${cIdx}`);
+    if (chk) {
+      chk.checked = !chk.checked;
+      toggleChapter(sub, cIdx, chk.checked);
     }
   }
 
-  function updateRtp(status) {
-    const sub = document.getElementById("subject-select").value;
-    appData.rtpDone[sub] = status;
-    saveToStorage();
+  function toggleChapter(sub, cIdx, status) {
+    const chap = SYLLABUS[sub].chapters[cIdx];
+    chap.units.forEach((_, uIdx) => {
+      const uKey = `${sub}_c${cIdx}_u${uIdx}`;
+      if (status) state.completed[uKey] = true;
+      else delete state.completed[uKey];
+    });
+    updateChapterProgressVisuals(sub, cIdx);
   }
 
-  function updateSubMock(val) {
-    const sub = document.getElementById("subject-select").value;
-    appData.mocksDone[sub] = parseInt(val) || 0;
-    saveToStorage();
+  function toggleUnit(sub, cIdx, uIdx, status) {
+    const uKey = `${sub}_c${cIdx}_u${uIdx}`;
+    if (status) state.completed[uKey] = true;
+    else delete state.completed[uKey];
+    updateChapterProgressVisuals(sub, cIdx);
   }
 
-  function saveToStorage() {
-    localStorage.setItem("ca_found_revision_state", JSON.stringify(appData));
-  }
-
-  function saveAndShowDashboard() {
-    saveToStorage();
-    document.getElementById("page-input").classList.add("hidden");
-    document.getElementById("plan-settings-card").classList.add("hidden");
-    document.getElementById("page-dashboard").classList.remove("hidden");
-    buildDashboard();
-  }
-
-  function showInputPage() {
-    document.getElementById("page-dashboard").classList.add("hidden");
-    document.getElementById("page-input").classList.remove("hidden");
-    document.getElementById("plan-settings-card").classList.remove("hidden");
+  function toggleOmission(sub, cIdx) {
+    const key = `${sub}_c${cIdx}`;
+    if (state.omitted[key]) delete state.omitted[key];
+    else state.omitted[key] = true;
+    persist();
     renderSubjectView();
   }
 
-  function buildDashboard() {
-    let grandTotalUnits = 0;
-    let grandDoneUnits = 0;
-    let totalRtpCompleted = 0;
-    let totalMocksAttempted = 0;
+  function toggleDrawer(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const isHidden = el.classList.contains("hidden");
+    el.classList.toggle("hidden", !isHidden);
+    btn.querySelector("span").innerText = isHidden 
+      ? btn.querySelector("span").innerText.replace("▾", "▴")
+      : btn.querySelector("span").innerText.replace("▴", "▾");
+  }
 
-    const barsDiv = document.getElementById("subject-bars-container");
-    barsDiv.innerHTML = "";
+  function toggleRTPStatus(status) {
+    const sub = document.getElementById("subject-dropdown").value;
+    state.rtp[sub] = status;
+    persist();
+  }
 
-    Object.keys(SYLLABUS_TREE).forEach(subKey => {
+  function updateMockCount(val) {
+    const sub = document.getElementById("subject-dropdown").value;
+    state.mocks[sub] = parseInt(val) || 0;
+    persist();
+  }
+
+  function switchView(target) {
+    document.getElementById("tracker-view").classList.toggle("hidden", target === "dashboard");
+    document.getElementById("dashboard-view").classList.toggle("hidden", target !== "dashboard");
+    if (target === "dashboard") buildDashboardAudit();
+  }
+
+  function buildDashboardAudit() {
+    const div = document.getElementById("audit-subject-breakdown");
+    div.innerHTML = "";
+
+    Object.keys(SYLLABUS).forEach(subKey => {
       let subUnits = 0;
       let subDone = 0;
 
-      SYLLABUS_TREE[subKey].chapters.forEach((chap, cIdx) => {
-        const isOmitted = !!appData.omittedChapters[`${subKey}_c${cIdx}`];
-        if (!isOmitted) {
+      SYLLABUS[subKey].chapters.forEach((chap, cIdx) => {
+        if (!state.omitted[`${subKey}_c${cIdx}`]) {
           chap.units.forEach((_, uIdx) => {
             subUnits++;
-            if (appData.completedUnits[`${subKey}_c${cIdx}_u${uIdx}`]) subDone++;
+            if (state.completed[`${subKey}_c${cIdx}_u${uIdx}`]) subDone++;
           });
         }
       });
 
-      grandTotalUnits += subUnits;
-      grandDoneUnits += subDone;
+      const pct = subUnits > 0 ? Math.round((subDone / subUnits) * 100) : 100;
+      const rtpLabel = state.rtp[subKey] ? "✅ RTP Prepared" : "⏳ RTP Pending";
+      const mocks = state.mocks[subKey] || 0;
 
-      if (appData.rtpDone[subKey]) totalRtpCompleted++;
-      totalMocksAttempted += (appData.mocksDone[subKey] || 0);
-
-      const subPct = subUnits > 0 ? Math.round((subDone / subUnits) * 100) : 100;
-      const isRtp = appData.rtpDone[subKey] ? "✅ RTP Done" : "⏳ RTP Pending";
-      const mocks = appData.mocksDone[subKey] || 0;
-
-      barsDiv.innerHTML += `
-        <div style="margin-top:10px;">
-          <div style="display:flex; justify-content:space-between; font-size:12.5px; font-weight:600;">
-            <span>${SYLLABUS_TREE[subKey].name}</span>
-            <span>${subPct}% (${subDone}/${subUnits})</span>
+      div.innerHTML += `
+        <div style="margin-top:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700;">
+            <span>${SYLLABUS[subKey].name}</span>
+            <span>${pct}%</span>
           </div>
-          <div class="progress-track"><div class="progress-fill" style="width:${subPct}%"></div></div>
-          <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:-8px;">
-            <span>${isRtp}</span>
-            <span>Mocks Written: ${mocks}</span>
+          <div style="background:#e2e8f0; border-radius:999px; height:8px; overflow:hidden; margin:6px 0;">
+            <div style="height:100%; background:var(--brand); width:${pct}%;"></div>
           </div>
-        </div>`;
+          <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--slate-500); font-weight:600;">
+            <span>${rtpLabel}</span>
+            <span>${mocks} Mock Exam(s) Written</span>
+          </div>
+        </div>
+      `;
     });
-
-    const unitScore = grandTotalUnits > 0 ? (grandDoneUnits / grandTotalUnits) * 70 : 70;
-    const rtpScore = (totalRtpCompleted / 4) * 15;
-    const mockScore = Math.min(15, (totalMocksAttempted / 8) * 15);
-    const overallScore = Math.round(unitScore + rtpScore + mockScore);
-
-    document.getElementById("overall-bar").style.width = `${overallScore}%`;
-    document.getElementById("overall-label").innerText = `${overallScore}% Readiness Score`;
-
-    document.getElementById("strategy-reminder").innerHTML = `
-      <strong>Dynamic Pacing Active:</strong> Your plan reserves <strong>${appData.bufferDays} days</strong> exclusively for RTPs & Mock Exams. Ensure all remaining active units are completed before this buffer begins.
-    `;
   }
 
-  // ROBUST BACKUP & RESTORE MODAL CONTROLS
+  /* POPUP MODAL CONTROLS */
+  function openPacingModal() {
+    renderPacingModal();
+    document.getElementById("pacing-modal").style.display = "flex";
+  }
+
+  function closePacingModal() {
+    document.getElementById("pacing-modal").style.display = "none";
+  }
+
   function openBackupModal() {
-    const backupJson = JSON.stringify(appData);
-    document.getElementById("backup-string").value = backupJson;
     document.getElementById("backup-modal").style.display = "flex";
   }
 
@@ -789,56 +954,71 @@
     document.getElementById("backup-modal").style.display = "none";
   }
 
-  function handleOverlayClick(e) {
-    if (e.target.id === "backup-modal") {
-      closeBackupModal();
+  function closeOnModalOverlay(e, modalId) {
+    if (e.target.id === modalId) {
+      document.getElementById(modalId).style.display = "none";
     }
   }
 
-  document.addEventListener("keydown", function(e) {
+  document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
+      closePacingModal();
       closeBackupModal();
     }
   });
 
-  function copyBackupToClipboard() {
-    const str = document.getElementById("backup-string");
-    str.select();
-    navigator.clipboard.writeText(str.value).then(() => {
-      alert("Backup code copied! Save it in your WhatsApp chat or personal notes.");
-    });
-  }
-
+  /* FILE EXPORT & IMPORT */
   function downloadBackupFile() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", `CA_Foundation_Tracker_Backup_${new Date().toISOString().slice(0,10)}.json`);
-    dlAnchor.click();
+    const dataStr = JSON.stringify(state, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `CA_Foundation_Prep_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
-  function restoreFromCode() {
-    const raw = document.getElementById("restore-input").value.trim();
-    if (!raw) return alert("Please paste a valid backup string first.");
-    try {
-      const parsed = JSON.parse(raw);
-      if (parsed.completedUnits || parsed.omittedChapters) {
-        appData = parsed;
-        saveToStorage();
-        closeBackupModal();
-        renderSubjectView();
-        alert("Progress restored successfully!");
-      } else {
-        alert("Invalid backup format.");
+  function handleFileUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        if (parsed && typeof parsed === "object" && (parsed.completed || parsed.omitted || parsed.perDay)) {
+          state = {
+            completed: parsed.completed || {},
+            omitted: parsed.omitted || {},
+            rtp: parsed.rtp || {},
+            mocks: parsed.mocks || {},
+            perDay: parsed.perDay || 2,
+            buffer: parsed.buffer !== undefined ? parsed.buffer : null
+          };
+
+          persist();
+          closeBackupModal();
+          renderSubjectView();
+          alert("Progress loaded successfully!");
+        } else {
+          alert("The selected file is not a valid CA Foundation tracker backup.");
+        }
+      } catch (err) {
+        alert("Could not read file. Make sure it's the unaltered .json file.");
       }
-    } catch (e) {
-      alert("Error parsing backup code. Please verify the copied text.");
-    }
+    };
+    reader.readAsText(file);
+    event.target.value = "";
   }
 
   // BOOT
-  updatePlanUI();
-  renderSubjectView();
+  window.addEventListener("DOMContentLoaded", () => {
+    updateGlobalMetrics();
+    renderSubjectView();
+  });
 </script>
 </body>
 </html>
